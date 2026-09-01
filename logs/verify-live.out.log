@@ -1,0 +1,6 @@
+[bridge] Point model: 250 points; enabled devices: 3; endpoints: 3
+[bridge] target BMS001 (BMS) 192.168.0.3:502, Unit 1
+[bridge] target BMS002 (BMS) 192.168.0.4:502, Unit 1
+[bridge] target BMS003 (BMS) 192.168.0.5:502, Unit 1
+[bridge] Live control enabled: false
+[bridge] WebSocket server listening on 0.0.0.0:8082

@@ -1,0 +1,27 @@
+{
+  "name": "ems",
+  "version": "1.0.0",
+  "description": "> 项目：大力电工襄阳股份有限公司 · 10MW全钒液流电池储能电站 > 版本：V1.3 > 更新日期：2026-05-20",
+  "main": "modbus-bridge.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "points:generate": "python tools/export-point-model.py EMS通信点表V1.2.xlsx config/vrfb-point-model.json",
+    "start": "node modbus-bridge.js",
+    "start:mock": "node mock-bridge.js",
+    "diagnostics:modbus": "node tools/check-modbus-tcp.js",
+    "test": "node --test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "modbus-serial": "^8.0.25",
+    "ws": "^8.20.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "postject": "^1.0.0-alpha.6"
+  }
+}

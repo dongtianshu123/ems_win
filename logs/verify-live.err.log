@@ -1,0 +1,29 @@
+(node:28400) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[bridge] endpoint 192.168.0.3:502 connection failed: connect EACCES 192.168.0.3:502
+[bridge] endpoint 192.168.0.4:502 connection failed: connect EACCES 192.168.0.4:502
+[bridge] endpoint 192.168.0.5:502 connection failed: connect EACCES 192.168.0.5:502
+[bridge] endpoint 192.168.0.3:502 connection failed: connect EACCES 192.168.0.3:502
+[bridge] endpoint 192.168.0.4:502 connection failed: connect EACCES 192.168.0.4:502
+[bridge] endpoint 192.168.0.5:502 connection failed: connect EACCES 192.168.0.5:502
+[bridge] endpoint 192.168.0.3:502 connection failed: connect EACCES 192.168.0.3:502
+[bridge] endpoint 192.168.0.4:502 connection failed: connect EACCES 192.168.0.4:502
+[bridge] endpoint 192.168.0.5:502 connection failed: connect EACCES 192.168.0.5:502
+[bridge] endpoint 192.168.0.3:502 connection failed: connect EACCES 192.168.0.3:502
+[bridge] endpoint 192.168.0.4:502 connection failed: connect EACCES 192.168.0.4:502
+[bridge] endpoint 192.168.0.5:502 connection failed: connect EACCES 192.168.0.5:502
+[bridge] endpoint 192.168.0.3:502 connection failed: connect EACCES 192.168.0.3:502
+[bridge] endpoint 192.168.0.4:502 connection failed: connect EACCES 192.168.0.4:502
+[bridge] endpoint 192.168.0.5:502 connection failed: connect EACCES 192.168.0.5:502
+[bridge] endpoint 192.168.0.3:502 connection failed: connect EACCES 192.168.0.3:502
+[bridge] endpoint 192.168.0.4:502 connection failed: connect EACCES 192.168.0.4:502
+[bridge] endpoint 192.168.0.5:502 connection failed: connect EACCES 192.168.0.5:502
+[bridge] endpoint 192.168.0.3:502 connection failed: connect EACCES 192.168.0.3:502
+[bridge] endpoint 192.168.0.4:502 connection failed: connect EACCES 192.168.0.4:502
+[bridge] endpoint 192.168.0.5:502 connection failed: connect EACCES 192.168.0.5:502
+[bridge] endpoint 192.168.0.3:502 connection failed: connect EACCES 192.168.0.3:502
+[bridge] endpoint 192.168.0.4:502 connection failed: connect EACCES 192.168.0.4:502
+[bridge] endpoint 192.168.0.5:502 connection failed: connect EACCES 192.168.0.5:502
+[bridge] endpoint 192.168.0.3:502 connection failed: connect EACCES 192.168.0.3:502
+[bridge] endpoint 192.168.0.4:502 connection failed: connect EACCES 192.168.0.4:502
+[bridge] endpoint 192.168.0.5:502 connection failed: connect EACCES 192.168.0.5:502

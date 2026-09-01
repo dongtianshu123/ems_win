@@ -1,0 +1,1088 @@
+{
+  "schemaVersion": 1,
+  "stationId": "STATION",
+  "mappingStatus": "UNCONFIRMED",
+  "mappingNote": "已建立100套BMS和50套PCS资产占位；BMS与PCS真实对应关系须根据现场资料确认后再填写links和deviceId，程序不得按2:1自动控制。",
+  "assets": [
+    {
+      "id": "STATION",
+      "type": "STATION",
+      "name": "大力枣阳全钒液流储能电站"
+    },
+    {
+      "id": "AREA01",
+      "type": "AREA",
+      "name": "1号方阵",
+      "parentId": "STATION"
+    },
+    {
+      "id": "AREA02",
+      "type": "AREA",
+      "name": "2号方阵",
+      "parentId": "STATION"
+    },
+    {
+      "id": "AREA03",
+      "type": "AREA",
+      "name": "3号方阵",
+      "parentId": "STATION"
+    },
+    {
+      "id": "AREA04",
+      "type": "AREA",
+      "name": "4号方阵",
+      "parentId": "STATION"
+    },
+    {
+      "id": "PCS001",
+      "type": "PCS",
+      "name": "1号PCS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "PCS002",
+      "type": "PCS",
+      "name": "2号PCS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "PCS003",
+      "type": "PCS",
+      "name": "3号PCS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "PCS004",
+      "type": "PCS",
+      "name": "4号PCS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "PCS005",
+      "type": "PCS",
+      "name": "5号PCS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "PCS006",
+      "type": "PCS",
+      "name": "6号PCS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "PCS007",
+      "type": "PCS",
+      "name": "7号PCS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "PCS008",
+      "type": "PCS",
+      "name": "8号PCS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "PCS009",
+      "type": "PCS",
+      "name": "9号PCS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "PCS010",
+      "type": "PCS",
+      "name": "10号PCS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "PCS011",
+      "type": "PCS",
+      "name": "11号PCS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "PCS012",
+      "type": "PCS",
+      "name": "12号PCS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "PCS013",
+      "type": "PCS",
+      "name": "13号PCS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "PCS014",
+      "type": "PCS",
+      "name": "14号PCS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "PCS015",
+      "type": "PCS",
+      "name": "15号PCS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "PCS016",
+      "type": "PCS",
+      "name": "16号PCS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "PCS017",
+      "type": "PCS",
+      "name": "17号PCS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "PCS018",
+      "type": "PCS",
+      "name": "18号PCS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "PCS019",
+      "type": "PCS",
+      "name": "19号PCS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "PCS020",
+      "type": "PCS",
+      "name": "20号PCS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "PCS021",
+      "type": "PCS",
+      "name": "21号PCS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "PCS022",
+      "type": "PCS",
+      "name": "22号PCS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "PCS023",
+      "type": "PCS",
+      "name": "23号PCS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "PCS024",
+      "type": "PCS",
+      "name": "24号PCS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "PCS025",
+      "type": "PCS",
+      "name": "25号PCS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "PCS026",
+      "type": "PCS",
+      "name": "26号PCS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "PCS027",
+      "type": "PCS",
+      "name": "27号PCS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "PCS028",
+      "type": "PCS",
+      "name": "28号PCS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "PCS029",
+      "type": "PCS",
+      "name": "29号PCS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "PCS030",
+      "type": "PCS",
+      "name": "30号PCS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "PCS031",
+      "type": "PCS",
+      "name": "31号PCS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "PCS032",
+      "type": "PCS",
+      "name": "32号PCS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "PCS033",
+      "type": "PCS",
+      "name": "33号PCS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "PCS034",
+      "type": "PCS",
+      "name": "34号PCS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "PCS035",
+      "type": "PCS",
+      "name": "35号PCS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "PCS036",
+      "type": "PCS",
+      "name": "36号PCS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "PCS037",
+      "type": "PCS",
+      "name": "37号PCS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "PCS038",
+      "type": "PCS",
+      "name": "38号PCS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "PCS039",
+      "type": "PCS",
+      "name": "39号PCS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "PCS040",
+      "type": "PCS",
+      "name": "40号PCS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "PCS041",
+      "type": "PCS",
+      "name": "41号PCS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "PCS042",
+      "type": "PCS",
+      "name": "42号PCS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "PCS043",
+      "type": "PCS",
+      "name": "43号PCS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "PCS044",
+      "type": "PCS",
+      "name": "44号PCS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "PCS045",
+      "type": "PCS",
+      "name": "45号PCS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "PCS046",
+      "type": "PCS",
+      "name": "46号PCS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "PCS047",
+      "type": "PCS",
+      "name": "47号PCS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "PCS048",
+      "type": "PCS",
+      "name": "48号PCS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "PCS049",
+      "type": "PCS",
+      "name": "49号PCS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "PCS050",
+      "type": "PCS",
+      "name": "50号PCS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS001",
+      "type": "BMS",
+      "name": "1号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS002",
+      "type": "BMS",
+      "name": "2号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS003",
+      "type": "BMS",
+      "name": "3号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS004",
+      "type": "BMS",
+      "name": "4号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS005",
+      "type": "BMS",
+      "name": "5号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS006",
+      "type": "BMS",
+      "name": "6号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS007",
+      "type": "BMS",
+      "name": "7号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS008",
+      "type": "BMS",
+      "name": "8号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS009",
+      "type": "BMS",
+      "name": "9号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS010",
+      "type": "BMS",
+      "name": "10号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS011",
+      "type": "BMS",
+      "name": "11号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS012",
+      "type": "BMS",
+      "name": "12号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS013",
+      "type": "BMS",
+      "name": "13号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS014",
+      "type": "BMS",
+      "name": "14号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS015",
+      "type": "BMS",
+      "name": "15号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS016",
+      "type": "BMS",
+      "name": "16号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS017",
+      "type": "BMS",
+      "name": "17号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS018",
+      "type": "BMS",
+      "name": "18号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS019",
+      "type": "BMS",
+      "name": "19号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS020",
+      "type": "BMS",
+      "name": "20号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS021",
+      "type": "BMS",
+      "name": "21号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS022",
+      "type": "BMS",
+      "name": "22号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS023",
+      "type": "BMS",
+      "name": "23号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS024",
+      "type": "BMS",
+      "name": "24号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS025",
+      "type": "BMS",
+      "name": "25号BMS",
+      "parentId": "AREA01",
+      "deviceId": null
+    },
+    {
+      "id": "BMS026",
+      "type": "BMS",
+      "name": "26号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS027",
+      "type": "BMS",
+      "name": "27号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS028",
+      "type": "BMS",
+      "name": "28号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS029",
+      "type": "BMS",
+      "name": "29号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS030",
+      "type": "BMS",
+      "name": "30号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS031",
+      "type": "BMS",
+      "name": "31号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS032",
+      "type": "BMS",
+      "name": "32号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS033",
+      "type": "BMS",
+      "name": "33号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS034",
+      "type": "BMS",
+      "name": "34号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS035",
+      "type": "BMS",
+      "name": "35号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS036",
+      "type": "BMS",
+      "name": "36号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS037",
+      "type": "BMS",
+      "name": "37号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS038",
+      "type": "BMS",
+      "name": "38号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS039",
+      "type": "BMS",
+      "name": "39号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS040",
+      "type": "BMS",
+      "name": "40号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS041",
+      "type": "BMS",
+      "name": "41号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS042",
+      "type": "BMS",
+      "name": "42号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS043",
+      "type": "BMS",
+      "name": "43号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS044",
+      "type": "BMS",
+      "name": "44号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS045",
+      "type": "BMS",
+      "name": "45号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS046",
+      "type": "BMS",
+      "name": "46号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS047",
+      "type": "BMS",
+      "name": "47号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS048",
+      "type": "BMS",
+      "name": "48号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS049",
+      "type": "BMS",
+      "name": "49号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS050",
+      "type": "BMS",
+      "name": "50号BMS",
+      "parentId": "AREA02",
+      "deviceId": null
+    },
+    {
+      "id": "BMS051",
+      "type": "BMS",
+      "name": "51号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS052",
+      "type": "BMS",
+      "name": "52号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS053",
+      "type": "BMS",
+      "name": "53号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS054",
+      "type": "BMS",
+      "name": "54号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS055",
+      "type": "BMS",
+      "name": "55号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS056",
+      "type": "BMS",
+      "name": "56号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS057",
+      "type": "BMS",
+      "name": "57号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS058",
+      "type": "BMS",
+      "name": "58号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS059",
+      "type": "BMS",
+      "name": "59号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS060",
+      "type": "BMS",
+      "name": "60号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS061",
+      "type": "BMS",
+      "name": "61号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS062",
+      "type": "BMS",
+      "name": "62号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS063",
+      "type": "BMS",
+      "name": "63号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS064",
+      "type": "BMS",
+      "name": "64号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS065",
+      "type": "BMS",
+      "name": "65号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS066",
+      "type": "BMS",
+      "name": "66号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS067",
+      "type": "BMS",
+      "name": "67号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS068",
+      "type": "BMS",
+      "name": "68号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS069",
+      "type": "BMS",
+      "name": "69号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS070",
+      "type": "BMS",
+      "name": "70号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS071",
+      "type": "BMS",
+      "name": "71号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS072",
+      "type": "BMS",
+      "name": "72号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS073",
+      "type": "BMS",
+      "name": "73号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS074",
+      "type": "BMS",
+      "name": "74号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS075",
+      "type": "BMS",
+      "name": "75号BMS",
+      "parentId": "AREA03",
+      "deviceId": null
+    },
+    {
+      "id": "BMS076",
+      "type": "BMS",
+      "name": "76号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS077",
+      "type": "BMS",
+      "name": "77号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS078",
+      "type": "BMS",
+      "name": "78号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS079",
+      "type": "BMS",
+      "name": "79号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS080",
+      "type": "BMS",
+      "name": "80号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS081",
+      "type": "BMS",
+      "name": "81号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS082",
+      "type": "BMS",
+      "name": "82号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS083",
+      "type": "BMS",
+      "name": "83号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS084",
+      "type": "BMS",
+      "name": "84号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS085",
+      "type": "BMS",
+      "name": "85号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS086",
+      "type": "BMS",
+      "name": "86号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS087",
+      "type": "BMS",
+      "name": "87号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS088",
+      "type": "BMS",
+      "name": "88号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS089",
+      "type": "BMS",
+      "name": "89号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS090",
+      "type": "BMS",
+      "name": "90号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS091",
+      "type": "BMS",
+      "name": "91号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS092",
+      "type": "BMS",
+      "name": "92号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS093",
+      "type": "BMS",
+      "name": "93号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS094",
+      "type": "BMS",
+      "name": "94号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS095",
+      "type": "BMS",
+      "name": "95号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS096",
+      "type": "BMS",
+      "name": "96号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS097",
+      "type": "BMS",
+      "name": "97号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS098",
+      "type": "BMS",
+      "name": "98号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS099",
+      "type": "BMS",
+      "name": "99号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    },
+    {
+      "id": "BMS100",
+      "type": "BMS",
+      "name": "100号BMS",
+      "parentId": "AREA04",
+      "deviceId": null
+    }
+  ],
+  "links": []
+}

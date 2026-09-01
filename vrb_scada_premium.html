@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VRFB Energy Command Center</title>
+<script src="/lib/echarts.min.js"></script>
+<script src="src/channel-guard.js"></script>
+<style>
+:root{
+  --bg:#04070d;--panel:rgba(12,20,33,.82);--panel-strong:rgba(15,27,44,.96);
+  --line:rgba(116,164,211,.16);--line-hot:rgba(75,225,255,.42);
+  --text:#edf7ff;--muted:#6f8297;--cyan:#43e7ff;--blue:#4f8dff;
+  --green:#42f5a7;--amber:#ffca61;--red:#ff647c;--purple:#9b7bff;
+  --shadow:0 24px 70px rgba(0,0,0,.38);--radius:18px;
+}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,"Microsoft YaHei",system-ui,sans-serif}
+body{overflow-x:hidden;background-image:radial-gradient(circle at 50% -10%,rgba(44,113,184,.22),transparent 35%),linear-gradient(rgba(75,132,176,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(75,132,176,.025) 1px,transparent 1px);background-size:auto,32px 32px,32px 32px}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 0 48%,rgba(67,231,255,.025) 50%,transparent 52%);background-size:220px 100%;animation:scan 12s linear infinite}
+@keyframes scan{to{background-position:440px 0}}@keyframes pulse{50%{opacity:.46}}@keyframes dash{to{stroke-dashoffset:-36}}
+button{font:inherit}.command-center{min-height:100vh;padding:18px;display:flex;flex-direction:column;gap:14px;max-width:2200px;margin:auto}
+.glass{background:linear-gradient(145deg,rgba(18,31,50,.92),rgba(8,15,26,.78));border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(18px);position:relative;overflow:hidden}
+.glass:after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(115deg,rgba(255,255,255,.035),transparent 24%)}
+.topbar{height:76px;border-radius:var(--radius);padding:0 22px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:14px}.brand-logo{display:block;width:205px;height:38px;object-fit:contain;object-position:left center}
+.eyebrow{font-size:10px;letter-spacing:3px;color:var(--cyan);text-transform:uppercase}.brand h1{font-size:19px;letter-spacing:.5px;margin:3px 0 0;font-weight:650}.brand h1 span{color:#7890a8;font-weight:400}
+.top-meta{display:flex;align-items:center;gap:20px}.weather{color:var(--amber);font-size:13px}.clock{font-family:Consolas,monospace;text-align:right}.clock b{display:block;font-size:16px}.clock small{color:var(--muted)}
+.source-pill{display:flex;align-items:center;gap:8px;border:1px solid var(--line-hot);border-radius:99px;padding:8px 12px;font-size:11px;color:var(--cyan);background:rgba(67,231,255,.06)}.source-pill i{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 12px currentColor;animation:pulse 1.5s infinite}
+.status-ribbon{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:10px}.kpi{min-height:94px;border-radius:15px;padding:15px 16px}.kpi-label{font-size:11px;letter-spacing:.8px;color:var(--muted);display:flex;justify-content:space-between}.kpi-icon{color:#4e6580}.kpi-value{font:600 26px/1.1 Consolas,monospace;margin-top:9px;letter-spacing:-1px}.kpi-value small{font:500 11px Inter,sans-serif;color:var(--muted);margin-left:5px}.kpi-trend{font-size:10px;color:var(--green);margin-top:5px}.cyan{color:var(--cyan)}.green{color:var(--green)}.amber{color:var(--amber)}.red{color:var(--red)}
+.workspace{display:grid;grid-template-columns:255px minmax(620px,1fr) 330px;gap:14px;min-height:610px}.side,.right-stack{display:flex;flex-direction:column;gap:14px}.panel{border-radius:var(--radius);padding:16px}.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}.panel-title{font-size:12px;letter-spacing:1.2px;font-weight:650}.panel-title small{display:block;color:var(--muted);font-size:9px;letter-spacing:.5px;margin-top:3px;font-weight:400}.panel-index{font:10px Consolas;color:#536b82}
+.asset-tree{flex:1}.asset-row{width:100%;color:inherit;text-align:left;background:transparent;padding:10px;border-radius:10px;margin:5px 0;border:1px solid transparent;display:flex;align-items:center;gap:10px;transition:.2s;cursor:pointer}.asset-row:hover,.asset-row.active{background:rgba(67,231,255,.065);border-color:rgba(67,231,255,.15)}.asset-icon{width:29px;height:29px;border-radius:8px;background:#101e30;display:grid;place-items:center;color:var(--cyan)}.asset-copy{flex:1}.asset-copy b{font-size:11px;display:block}.asset-copy span{font-size:9px;color:var(--muted)}.asset-state{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.health-panel{min-height:185px}.health-item{margin:11px 0}.health-label{display:flex;justify-content:space-between;font-size:10px;color:#91a4b7;margin-bottom:6px}.health-track{height:4px;background:#111f30;border-radius:5px;overflow:hidden}.health-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--blue),var(--cyan));box-shadow:0 0 12px rgba(67,231,255,.4)}
+.main-stage{min-width:0}.asset-view{height:100%}.asset-view[hidden]{display:none!important}.asset-view[data-view="overview"]{display:grid;grid-template-rows:360px 1fr;gap:14px}.energy-orbit{border-radius:var(--radius);padding:0;min-height:360px}.stage-head{position:absolute;top:17px;left:19px;z-index:3}.stage-tools{position:absolute;top:15px;right:16px;display:flex;gap:7px;z-index:3}.chip{font-size:9px;color:#8aa0b5;padding:6px 9px;border-radius:8px;background:rgba(13,25,40,.85);border:1px solid var(--line)}
+.orbit-svg{width:100%;height:100%;display:block}.orbit-line{stroke:rgba(67,231,255,.48);stroke-width:2;stroke-dasharray:8 7;animation:dash 1.2s linear infinite;filter:drop-shadow(0 0 4px rgba(67,231,255,.5))}.orbit-ring{fill:none;stroke:rgba(79,141,255,.18);stroke-width:1}.orbit-node{fill:#0b1828;stroke:rgba(67,231,255,.38);stroke-width:1.4}.orbit-node.secondary{stroke:rgba(155,123,255,.38)}.node-label{fill:#8fa8bc;font-size:10px}.node-value{fill:#edf7ff;font:600 12px Consolas}.core-halo{fill:url(#coreGlow);stroke:rgba(67,231,255,.6);stroke-width:1.5;filter:drop-shadow(0 0 14px rgba(67,231,255,.22))}.core-power{fill:#fff;font:700 25px Consolas}.core-mode{fill:#43e7ff;font-size:10px;letter-spacing:1px}
+.bottom-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:14px;min-height:236px}.trend-panel,.fleet-panel{border-radius:var(--radius);padding:16px}.trend-chart{height:175px}.fleet-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.pcs-card{border:1px solid rgba(100,145,183,.14);border-radius:10px;padding:8px;background:rgba(8,17,29,.65);cursor:pointer;transition:.18s;min-width:0}.pcs-card:hover,.pcs-card.active{transform:translateY(-2px);border-color:rgba(67,231,255,.45);background:rgba(67,231,255,.07)}.pcs-name{font:600 10px Consolas;color:#91a8bd}.pcs-power{font:600 12px Consolas;margin-top:5px;white-space:nowrap}.pcs-bar{height:3px;background:#162638;margin-top:7px;border-radius:3px;overflow:hidden}.pcs-bar i{display:block;height:100%;background:var(--green)}
+.dispatch-card{min-height:180px}.dispatch-ring{width:118px;height:118px;margin:2px auto;position:relative;border-radius:50%;background:conic-gradient(var(--cyan) 0 var(--soc),rgba(53,75,96,.28) var(--soc) 100%);display:grid;place-items:center;box-shadow:0 0 35px rgba(67,231,255,.1)}.dispatch-ring:before{content:"";width:88px;height:88px;background:#0a1422;border-radius:50%;border:1px solid var(--line)}.ring-copy{position:absolute;text-align:center}.ring-copy b{font:700 25px Consolas}.ring-copy span{font-size:9px;color:var(--muted);display:block}.dispatch-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.mini-stat{padding:8px;background:rgba(4,11,20,.5);border-radius:9px}.mini-stat span{font-size:8px;color:var(--muted);display:block}.mini-stat b{font:600 11px Consolas}
+.alarm-stream{flex:1;min-height:190px}.alarm-list{display:flex;flex-direction:column;gap:7px}.alarm-item{display:grid;grid-template-columns:7px 1fr auto;gap:8px;align-items:start;padding:9px;border-radius:9px;background:rgba(6,14,24,.65);border:1px solid rgba(100,145,183,.1)}.alarm-level{width:7px;height:7px;border-radius:50%;margin-top:3px;background:var(--amber);box-shadow:0 0 8px currentColor}.alarm-copy b{font-size:10px;display:block}.alarm-copy span{font-size:8px;color:var(--muted)}.alarm-time{font:8px Consolas;color:#536b82}.alarm-empty{text-align:center;color:#536b82;padding:34px 8px;font-size:10px}
+.device-inspector{min-height:190px}.inspector-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--line)}.inspector-id{font:600 16px Consolas}.inspector-tag{font-size:8px;color:var(--green);padding:4px 7px;border-radius:20px;background:rgba(66,245,167,.08)}.inspector-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:10px}.inspector-cell{padding:8px;border-radius:8px;background:rgba(6,14,24,.55)}.inspector-cell span{display:block;font-size:8px;color:var(--muted)}.inspector-cell b{font:600 11px Consolas;margin-top:3px;display:block}
+.engineering-view{padding:18px;min-height:610px;border-radius:var(--radius)}.engineering-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:12px}.engineering-head h2{font-size:17px;margin:0 0 5px}.engineering-head p{font-size:10px;color:var(--muted);margin:0}.unit-selector{display:grid;grid-template-columns:repeat(10,minmax(64px,1fr));gap:7px;margin:0 0 14px}.unit-tab{padding:8px 5px;border-radius:9px;border:1px solid rgba(67,231,255,.15);background:rgba(6,14,24,.7);color:#8ba2b8;font:600 10px Consolas;cursor:pointer}.unit-tab small{display:block;margin-top:3px;color:#526b82;font-size:7px}.unit-tab:hover{border-color:rgba(67,231,255,.42);color:#dcecff}.unit-tab.active{border-color:var(--cyan);color:var(--cyan);background:rgba(67,231,255,.1);box-shadow:inset 0 0 15px rgba(67,231,255,.08)}.topology-chain{display:flex;align-items:stretch;gap:7px;overflow-x:auto;padding:15px 4px 22px}.topology-node{min-width:104px;flex:1;padding:13px 10px;border-radius:12px;background:rgba(6,14,24,.72);border:1px solid rgba(67,231,255,.18);text-align:center}.topology-node b{display:block;font-size:10px;color:#dcecff}.topology-node span{display:block;font-size:8px;color:var(--muted);margin-top:5px}.topology-arrow{display:grid;place-items:center;color:var(--cyan);font:16px Consolas}.engineering-grid{display:grid;grid-template-columns:repeat(4,minmax(110px,1fr));gap:9px}.engineering-metric{padding:11px;border-radius:10px;background:rgba(6,14,24,.6);border:1px solid rgba(100,145,183,.1)}.engineering-metric span{font-size:8px;color:var(--muted);display:block}.engineering-metric b{font:600 12px Consolas;display:block;margin-top:5px}.bms-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.stack-bank,.hydraulic-loop,.protocol-card{padding:14px;border-radius:14px;background:rgba(6,14,24,.62);border:1px solid var(--line)}.stack-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px}.stack-cell{padding:10px 5px;border-radius:8px;text-align:center;background:linear-gradient(145deg,rgba(155,123,255,.14),rgba(67,231,255,.06));border:1px solid rgba(155,123,255,.22);font:9px Consolas}.hydraulic-line{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-top:11px}.tank,.pump{padding:10px;border-radius:10px;background:#0b1928;text-align:center;font-size:9px;border:1px solid rgba(67,231,255,.18)}.pipe{height:3px;background:linear-gradient(90deg,var(--purple),var(--cyan));box-shadow:0 0 9px rgba(67,231,255,.34)}.engineering-note{font-size:9px;color:var(--amber);margin-top:12px;line-height:1.6}.protocol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.protocol-card h3{font-size:12px;margin:0 0 12px}.protocol-card dl{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0;font-size:9px}.protocol-card dt{color:var(--muted)}.protocol-card dd{margin:0;text-align:right;font-family:Consolas}.zone-strip{margin-top:12px;font:9px Consolas;color:#90a9bd;line-height:1.8;word-break:break-all}
+.topology-visual{position:relative;padding:10px;border:1px solid rgba(67,231,255,.14);border-radius:16px;background:radial-gradient(circle at 50% 15%,rgba(41,102,148,.13),transparent 42%),rgba(3,10,18,.64);overflow:hidden}.topology-visual:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(67,231,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(67,231,255,.035) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}.pcs-topology,.vrfb-topology{position:relative;width:100%;height:auto;display:block;min-height:310px}.svg-label{fill:#dcecff;font:600 12px "Microsoft YaHei"}.svg-sub{fill:#718aa2;font:9px "Microsoft YaHei"}.svg-value{fill:#43e7ff;font:600 11px Consolas}.svg-wire{fill:none;stroke:#54718c;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.svg-wire.power{stroke:#43e7ff;stroke-dasharray:10 8;animation:dash 1.25s linear infinite;filter:drop-shadow(0 0 4px rgba(67,231,255,.5))}.svg-device{fill:#091827;stroke:#42637f;stroke-width:1.4}.svg-symbol{fill:none;stroke:#9db4c8;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.svg-terminal{fill:#43e7ff}.device-state.is-on .svg-device{stroke:#42f5a7;filter:drop-shadow(0 0 6px rgba(66,245,167,.28))}.device-state.is-off{opacity:.46}.device-state.is-unknown .svg-device{stroke:#ffca61;stroke-dasharray:4 3}.topology-legend{display:flex;gap:15px;flex-wrap:wrap;margin:8px 4px 2px;color:#6f8297;font-size:9px}.topology-legend i{display:inline-block;width:17px;height:3px;margin-right:5px;vertical-align:middle;border-radius:2px}.bms-layout{grid-template-columns:1fr}.bms-detail-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:14px}.vrfb-topology{min-height:390px}.process-pipe{fill:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:14 9;animation:dash 1.35s linear infinite}.process-pipe.positive{stroke:url(#positivePipe);filter:drop-shadow(0 0 6px rgba(247,194,62,.4))}.process-pipe.negative{stroke:url(#negativePipe);filter:drop-shadow(0 0 6px rgba(155,89,255,.42))}.vrfb-topology.paused .process-pipe{animation-play-state:paused;opacity:.36}.tank-shell{fill:url(#tankShell);stroke:#8ca5bb;stroke-width:1.5}.tank-top{fill:rgba(218,235,247,.17);stroke:#a8bdce;stroke-width:1.2}.tank-liquid-positive{fill:url(#positiveLiquid)}.tank-liquid-negative{fill:url(#negativeLiquid)}.tank-highlight{fill:rgba(255,255,255,.16)}.pump-body{fill:url(#pumpMetal);stroke:#91a7ba;stroke-width:1.3}.pump-wheel{fill:none;stroke:#43e7ff;stroke-width:3;stroke-dasharray:5 4;transform-box:fill-box;transform-origin:center;animation:pumpSpin 1.4s linear infinite}.vrfb-topology.paused .pump-wheel{animation-play-state:paused}.stack-frame{fill:url(#stackBody);stroke:#6c91ad;stroke-width:1}.stack-cell-svg{fill:#11283b;stroke:#4b718d;stroke-width:1}.stack-cell-svg:nth-child(odd){fill:#142c42}.sensor-badge{fill:#071522;stroke:#43e7ff;stroke-width:1.2;filter:drop-shadow(0 0 5px rgba(67,231,255,.3))}.sensor-copy{fill:#dcecff;font:600 9px Consolas}.electrical-link{fill:none;stroke:#ffca61;stroke-width:3;stroke-dasharray:7 6;animation:dash 1.5s linear infinite}.sensor-bus{fill:none;stroke:#4f8dff;stroke-width:2;stroke-dasharray:3 6}.stack-grid{grid-template-columns:repeat(5,1fr)}@keyframes pumpSpin{to{transform:rotate(360deg)}}
+.pcs-topology.paused .svg-wire.power{animation-play-state:paused;opacity:.36}
+.npc-rail{fill:none;stroke:#43e7ff;stroke-width:2.4;stroke-linecap:round}.npc-wire{fill:none;stroke:#a9c5d8;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.npc-node{fill:#071522;stroke:#43e7ff;stroke-width:1.8}.npc-net-label{fill:#ffca61;font:700 10px Consolas}.igbt-channel,.igbt-terminal,.igbt-gate,.igbt-arrow,.diode-wire,.diode-bar{fill:none;stroke:#d7ebf8;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}.igbt-gate{stroke:#43e7ff}.igbt-arrow{stroke:#ffca61}.diode-shape{fill:none;stroke:#9b7bff;stroke-width:1.6}.igbt-name{fill:#8fb0c7;font:700 8px Consolas}.phase-output{fill:#071522;stroke:#42f5a7;stroke-width:2}.phase-name{fill:#42f5a7;font:700 11px Consolas}.npc-annotation{fill:#7894aa;font:8px "Microsoft YaHei"}
+.channel-selector{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}.channel-selector .settings-button.active{color:var(--green);border-color:rgba(66,245,167,.55);background:rgba(66,245,167,.09)}.channel-target{font:9px Consolas;color:#7890a8;min-width:150px;text-align:right}.settings-view{height:auto;min-height:610px}.settings-toolbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.settings-button{border:1px solid rgba(67,231,255,.24);background:rgba(67,231,255,.07);color:#bfefff;padding:8px 12px;border-radius:9px;font-size:10px;cursor:pointer}.settings-button:hover{border-color:var(--cyan);color:#fff}.settings-button.primary{background:linear-gradient(135deg,rgba(79,141,255,.28),rgba(67,231,255,.16));border-color:rgba(67,231,255,.52)}.settings-button.danger{color:#ff9aac;border-color:rgba(255,100,124,.28);background:rgba(255,100,124,.06)}.settings-summary{display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));gap:9px;padding:12px;border-radius:13px;background:rgba(5,13,23,.62);border:1px solid var(--line);margin-bottom:12px}.settings-field{min-width:0}.settings-field label{display:block;color:#7d93a8;font-size:8px;margin-bottom:5px}.settings-field input,.settings-field select{width:100%;border:1px solid rgba(100,145,183,.22);background:#071321;color:#dcecff;border-radius:7px;padding:7px 8px;font:10px Consolas}.settings-field input:focus,.settings-field select:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 2px rgba(67,231,255,.07)}.settings-note{font-size:9px;line-height:1.7;color:#8095a8;margin:0 0 12px}.settings-note strong{color:var(--amber)}.settings-status{padding:9px 11px;border-radius:9px;background:rgba(67,231,255,.055);border:1px solid rgba(67,231,255,.12);font-size:9px;color:#8fb3c8;margin-bottom:12px;white-space:pre-wrap}.device-settings-list{display:flex;flex-direction:column;gap:9px}.device-setting-card{border:1px solid rgba(100,145,183,.16);background:rgba(5,13,23,.7);border-radius:13px;padding:11px}.device-setting-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}.device-setting-title{display:flex;align-items:center;gap:9px;font:600 11px Consolas}.device-setting-title input{accent-color:var(--cyan)}.device-setting-actions{display:flex;gap:6px}.device-fields{display:grid;grid-template-columns:1.05fr 1.2fr .8fr 1.2fr .55fr .55fr .7fr .7fr .7fr .6fr;gap:7px}.gateway-fields{display:grid;grid-template-columns:repeat(5,minmax(100px,1fr));gap:7px;margin-top:8px;padding-top:8px;border-top:1px dashed rgba(100,145,183,.16)}.gateway-fields[hidden]{display:none}.test-result{font:9px Consolas;color:#7f97ad;margin-top:8px;min-height:14px}.test-result.pass{color:var(--green)}.test-result.fail{color:var(--red)}.settings-empty{padding:35px;text-align:center;border:1px dashed rgba(100,145,183,.2);border-radius:12px;color:#60778d;font-size:10px}.file-button{display:inline-flex;align-items:center}.file-button input{display:none}
+.footer-strip{height:30px;display:flex;align-items:center;justify-content:space-between;color:#536b82;font:9px Consolas;padding:0 5px}.footer-strip span{display:flex;gap:14px}.legend i{display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:4px}
+.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.report-basis{padding:16px;border-radius:14px;background:rgba(5,13,23,.66);border:1px solid var(--line)}.report-basis h3{margin:0 0 4px;font-size:13px}.report-basis p{margin:0 0 14px;color:var(--muted);font-size:9px;line-height:1.6}.report-status{display:inline-block;padding:5px 9px;border-radius:20px;font:700 9px Consolas;color:var(--amber);border:1px solid rgba(255,202,97,.3);background:rgba(255,202,97,.07)}.report-status.valid{color:var(--green);border-color:rgba(66,245,167,.3);background:rgba(66,245,167,.07)}.report-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:13px}.report-metric{padding:10px;border-radius:9px;background:rgba(12,27,43,.72)}.report-metric span{display:block;color:var(--muted);font-size:8px}.report-metric b{display:block;margin-top:4px;font:600 14px Consolas}.report-caveat{margin-top:14px;padding:12px;border-left:3px solid var(--amber);background:rgba(255,202,97,.055);color:#aab9c6;font-size:9px;line-height:1.7}.settings-button:disabled{opacity:.38;cursor:not-allowed}
+@media(max-width:1400px){.workspace{grid-template-columns:220px minmax(560px,1fr) 290px}.status-ribbon{grid-template-columns:repeat(3,1fr)}.fleet-grid{grid-template-columns:repeat(5,1fr)}}
+@media(max-width:1050px){.workspace{grid-template-columns:1fr}.side,.right-stack{display:grid;grid-template-columns:1fr 1fr}.asset-tree{min-height:260px}.topbar{height:auto;padding:14px;gap:15px;align-items:flex-start}.top-meta{flex-wrap:wrap;justify-content:flex-end}.bottom-grid,.bms-layout,.report-grid{grid-template-columns:1fr}}
+@media(max-width:1050px){.bms-detail-grid{grid-template-columns:1fr}}
+@media(max-width:1500px){.device-fields{grid-template-columns:repeat(5,1fr)}.settings-summary{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){.device-fields,.gateway-fields,.settings-summary{grid-template-columns:repeat(2,1fr)}.engineering-head{flex-direction:column}.settings-toolbar{justify-content:flex-start}}
+@media(max-width:680px){.command-center{padding:8px}.status-ribbon{grid-template-columns:repeat(2,1fr)}.side,.right-stack{grid-template-columns:1fr}.brand h1{font-size:15px}.weather{display:none}.fleet-grid{grid-template-columns:repeat(4,1fr)}.main-stage{grid-template-rows:330px auto}.topbar{flex-direction:column}.top-meta{width:100%;justify-content:space-between}}
+</style>
+</head>
+<body>
+<div class="command-center">
+  <header class="topbar glass">
+    <div class="brand"><img class="brand-logo" src="bigpawer%20logo.png" alt="BIG POWER 大力电工"><div><div class="eyebrow">VRFB · Energy Command Center</div><h1>大力枣阳全钒液流储能电站 <span>/ 数字孪生运行中心</span></h1></div></div>
+    <div class="top-meta"><div class="source-pill" id="sourcePill"><i></i><span>正在连接</span></div><div class="weather">● 枣阳 · 24°C · 微风</div><div class="clock"><b id="clock">--:--:--</b><small id="date">----</small></div></div>
+  </header>
+
+  <section class="status-ribbon">
+    <article class="kpi glass"><div class="kpi-label"><span>全站实时功率</span><span class="kpi-icon">PΣ</span></div><div class="kpi-value cyan" id="totalPower">--<small>MW</small></div><div class="kpi-trend" id="powerMode">等待数据</div></article>
+    <article class="kpi glass"><div class="kpi-label"><span>平均荷电状态</span><span class="kpi-icon">SOC</span></div><div class="kpi-value" id="avgSoc">--<small>%</small></div><div class="kpi-trend">储能可用度监测</div></article>
+    <article class="kpi glass"><div class="kpi-label"><span>PCS 在线率</span><span class="kpi-icon">PCS</span></div><div class="kpi-value green" id="pcsOnline">--</div><div class="kpi-trend">变流器舰队状态</div></article>
+    <article class="kpi glass"><div class="kpi-label"><span>当日充电量</span><span class="kpi-icon">E+</span></div><div class="kpi-value" id="dailyEnergy">--<small>kWh</small></div><div class="kpi-trend">计量数据</div></article>
+    <article class="kpi glass"><div class="kpi-label"><span>系统综合效率</span><span class="kpi-icon">η</span></div><div class="kpi-value" id="efficiency">--<small>%</small></div><div class="kpi-trend">能量转换链路</div></article>
+    <article class="kpi glass"><div class="kpi-label"><span>活跃告警</span><span class="kpi-icon">ALM</span></div><div class="kpi-value amber" id="alarmCount">0<small>条</small></div><div class="kpi-trend" id="qualityText">通信质量检查中</div></article>
+  </section>
+
+  <section class="workspace">
+    <aside class="side">
+      <section class="panel glass asset-tree"><div class="panel-head"><div class="panel-title">资产层级<small>ASSET HIERARCHY</small></div><div class="panel-index">01</div></div><div id="assetTree"></div></section>
+      <section class="panel glass health-panel"><div class="panel-head"><div class="panel-title">系统健康度<small>SYSTEM HEALTH</small></div><div class="panel-index">02</div></div><div id="healthBars"></div></section>
+    </aside>
+
+    <main class="main-stage">
+      <div class="asset-view" data-view="overview">
+      <section class="energy-orbit glass">
+        <div class="stage-head"><div class="panel-title">全站能量枢纽<small>REAL-TIME ENERGY ORCHESTRATION</small></div></div>
+        <div class="stage-tools"><span class="chip">35kV</span><span class="chip">10MW / 40MWh</span><span class="chip" id="flowChip">能流待机</span></div>
+        <svg class="orbit-svg" viewBox="0 0 800 360" role="img" aria-label="储能电站实时能流拓扑">
+          <defs><radialGradient id="coreGlow"><stop offset="0" stop-color="#173e57"/><stop offset=".72" stop-color="#0c2134"/><stop offset="1" stop-color="#07121f"/></radialGradient></defs>
+          <circle class="orbit-ring" cx="400" cy="184" r="126"/><circle class="orbit-ring" cx="400" cy="184" r="158" stroke-dasharray="2 9"/>
+          <path class="orbit-line" d="M143 92 C250 92 270 145 326 165"/><path class="orbit-line" d="M657 92 C550 92 530 145 474 165"/><path class="orbit-line" d="M143 278 C250 278 270 225 326 203"/><path class="orbit-line" d="M657 278 C550 278 530 225 474 203"/>
+          <g transform="translate(85 55)"><rect class="orbit-node" width="116" height="72" rx="14"/><text class="node-label" x="14" y="24">35kV 公共电网</text><text class="node-value" id="gridVoltage" x="14" y="49">-- kV</text><circle cx="98" cy="19" r="4" fill="#42f5a7"/></g>
+          <g transform="translate(599 55)"><rect class="orbit-node secondary" width="116" height="72" rx="14"/><text class="node-label" x="14" y="24">PCS 变流系统</text><text class="node-value" id="orbitPcs" x="14" y="49">--</text><circle cx="98" cy="19" r="4" fill="#43e7ff"/></g>
+          <g transform="translate(85 242)"><rect class="orbit-node secondary" width="116" height="72" rx="14"/><text class="node-label" x="14" y="24">VRFB 电池系统</text><text class="node-value" id="orbitBattery" x="14" y="49">-- 组</text><circle cx="98" cy="19" r="4" fill="#9b7bff"/></g>
+          <g transform="translate(599 242)"><rect class="orbit-node" width="116" height="72" rx="14"/><text class="node-label" x="14" y="24">站级调度策略</text><text class="node-value" id="orbitMode" x="14" y="49">待机</text><circle cx="98" cy="19" r="4" fill="#ffca61"/></g>
+          <circle class="core-halo" cx="400" cy="184" r="76"/><text class="core-mode" id="coreMode" x="400" y="160" text-anchor="middle">ENERGY FLOW</text><text class="core-power" id="corePower" x="400" y="194" text-anchor="middle">-- MW</text><text class="node-label" id="coreSoc" x="400" y="219" text-anchor="middle">SOC --%</text>
+        </svg>
+      </section>
+
+      <div class="bottom-grid">
+        <section class="trend-panel glass"><div class="panel-head"><div class="panel-title">功率与 SOC 趋势<small>24H PERFORMANCE ENVELOPE</small></div><div class="panel-index">03</div></div><div class="trend-chart" id="trendChart"></div></section>
+        <section class="fleet-panel glass"><div class="panel-head"><div class="panel-title">PCS 设备舰队<small>CONVERTER FLEET</small></div><div class="panel-index">04</div></div><div class="fleet-grid" id="fleetGrid"></div></section>
+      </div>
+      </div>
+
+      <section class="asset-view engineering-view glass" data-view="pcs" hidden>
+        <div class="engineering-head"><div><h2>NPC 三电平 PCS 主拓扑</h2><p id="pcsViewCaption">选择设备后显示实时测点与开关反馈</p></div><span class="chip">EMS通信点表V1.2 · FC03</span></div>
+        <div class="unit-selector" id="pcsUnitSelector" aria-label="PCS设备选择"></div>
+        <div class="topology-visual">
+          <svg class="pcs-topology" viewBox="0 0 1500 520" role="img" aria-label="三相I型NPC三电平PCS工程电气拓扑">
+            <defs>
+              <linearGradient id="pcsPanel" x2="0" y2="1"><stop stop-color="#142b40"/><stop offset="1" stop-color="#07131f"/></linearGradient>
+              <symbol id="igbtWithDiode" viewBox="0 0 58 60">
+                <path class="igbt-terminal" d="M20 0V12M20 48V60"/><path class="igbt-channel" d="M20 12V48"/>
+                <path class="igbt-gate" d="M3 20V40M3 30H12M13 17V43"/><path class="igbt-arrow" d="M20 42l-7-5m0 0 2 6"/>
+                <path class="diode-wire" d="M20 4H43V13M43 47V56H20"/><path class="diode-bar" d="M34 14H52"/><path class="diode-shape" d="M43 17l-8 17h16z"/>
+              </symbol>
+              <symbol id="clampDiode" viewBox="0 0 30 60">
+                <path class="diode-wire" d="M15 0V12M15 46V60"/><path class="diode-bar" d="M6 14H24"/><path class="diode-shape" d="M15 17L7 40h16z"/>
+              </symbol>
+            </defs>
+            <path class="svg-wire power" d="M90 270h20m90 0h20m160 0h20m120 0h20M1245 270h15m95 0h15m60 0h10"/>
+            <g transform="translate(10 205)"><rect class="svg-device" width="80" height="130" rx="12"/><path class="svg-symbol" d="M21 42h38M21 65h38M21 88h38"/><text class="svg-label" x="40" y="19" text-anchor="middle">交流电网</text><text class="svg-value" id="pcsGridVoltageSvg" x="40" y="116" text-anchor="middle">-- V</text></g>
+            <g class="device-state is-unknown" data-component="ac-spd" transform="translate(110 205)"><title>交流侧浪涌保护器</title><rect class="svg-device" width="90" height="130" rx="12"/><path class="svg-symbol" d="M34 38l22 25H43l14 30"/><path class="svg-wire" d="M45 93v10m-14 0h28m-22 7h16"/><text class="svg-label" x="45" y="19" text-anchor="middle">交流 SPD</text><text class="svg-sub" x="45" y="121" text-anchor="middle">浪涌保护器</text></g>
+            <g class="device-state is-unknown" data-component="ac-precharge" transform="translate(220 170)"><rect class="svg-device" width="160" height="200" rx="12"/><text class="svg-label" x="80" y="20" text-anchor="middle">交流充电回路</text><path class="svg-symbol" d="M16 100h32m18 0h78M48 100l18-15M28 100V62h29m49 0h38M57 62l8-12 11 24 11-24 11 24 10-12M28 100v47h53m23 0h40M81 147l23-16"/><text class="svg-sub" x="80" y="180" text-anchor="middle">充电开关 · 电阻 · 旁路开关</text></g>
+            <g class="device-state is-on" data-component="lc-filter" transform="translate(400 205)"><rect class="svg-device" width="120" height="130" rx="12"/><text class="svg-label" x="60" y="19" text-anchor="middle">LC 滤波器</text><path class="svg-symbol" d="M10 65h15c0-19 25-19 25 0s25 19 25 0h20M95 65h15M84 65v27m-14 0h28m-22 8h16"/><text class="svg-value" id="pcsInverterVoltageSvg" x="60" y="116" text-anchor="middle">-- V</text></g>
+            <g class="device-state is-on" data-component="npc-bridge" data-topology="i-type-npc-3l" transform="translate(540 35)">
+              <rect class="svg-device" width="590" height="450" rx="16" fill="url(#pcsPanel)"/><text class="svg-label" x="295" y="22" text-anchor="middle">三相 I 型 NPC 三电平功率桥</text><text class="svg-sub" x="295" y="39" text-anchor="middle">12 × IGBT · 12 × 反并联二极管 · 6 × 中点钳位二极管</text>
+              <path class="npc-rail" data-rail="dc-positive" d="M35 55H555"/><path class="npc-rail" data-rail="dc-negative" d="M35 395H555"/><path class="npc-rail" data-rail="dc-neutral" d="M555 205v40"/>
+              <text class="npc-net-label" x="18" y="59">P / DC+</text><text class="npc-net-label" x="18" y="399">N / DC−</text><text class="npc-net-label" x="562" y="229">O</text>
+              <g data-phase-leg="A">
+                <path class="npc-wire" d="M130 55v10M130 125v10M130 195v30M130 225v10M130 295v10M130 365v30M130 225H75M200 145v-20H130M200 205v20M200 245v-20M200 305v-10H130"/>
+                <use href="#igbtWithDiode" x="101" y="65" width="58" height="60"/><use href="#igbtWithDiode" x="101" y="135" width="58" height="60"/><use href="#igbtWithDiode" x="101" y="235" width="58" height="60"/><use href="#igbtWithDiode" x="101" y="305" width="58" height="60"/>
+                <use href="#clampDiode" x="185" y="145" width="30" height="60" data-clamp="upper-A"/><use href="#clampDiode" x="185" y="245" width="30" height="60" data-clamp="lower-A"/><circle class="npc-node" cx="130" cy="125" r="3"/><circle class="npc-node" cx="130" cy="225" r="3"/><circle class="npc-node" cx="130" cy="295" r="3"/><circle class="npc-node" cx="200" cy="225" r="3"/><circle class="phase-output" id="phase-A-output" cx="75" cy="225" r="4"/>
+                <text class="igbt-name" x="87" y="95">T1A</text><text class="igbt-name" x="87" y="165">T2A</text><text class="igbt-name" x="87" y="265">T3A</text><text class="igbt-name" x="87" y="335">T4A</text><text class="phase-name" x="58" y="229">A</text><text class="npc-net-label" x="204" y="229">O</text>
+              </g>
+              <g data-phase-leg="B">
+                <path class="npc-wire" d="M300 55v10M300 125v10M300 195v30M300 225v10M300 295v10M300 365v30M300 225H245M370 145v-20H300M370 205v20M370 245v-20M370 305v-10H300"/>
+                <use href="#igbtWithDiode" x="271" y="65" width="58" height="60"/><use href="#igbtWithDiode" x="271" y="135" width="58" height="60"/><use href="#igbtWithDiode" x="271" y="235" width="58" height="60"/><use href="#igbtWithDiode" x="271" y="305" width="58" height="60"/>
+                <use href="#clampDiode" x="355" y="145" width="30" height="60" data-clamp="upper-B"/><use href="#clampDiode" x="355" y="245" width="30" height="60" data-clamp="lower-B"/><circle class="npc-node" cx="300" cy="125" r="3"/><circle class="npc-node" cx="300" cy="225" r="3"/><circle class="npc-node" cx="300" cy="295" r="3"/><circle class="npc-node" cx="370" cy="225" r="3"/><circle class="phase-output" id="phase-B-output" cx="245" cy="225" r="4"/>
+                <text class="igbt-name" x="257" y="95">T1B</text><text class="igbt-name" x="257" y="165">T2B</text><text class="igbt-name" x="257" y="265">T3B</text><text class="igbt-name" x="257" y="335">T4B</text><text class="phase-name" x="228" y="229">B</text><text class="npc-net-label" x="374" y="229">O</text>
+              </g>
+              <g data-phase-leg="C">
+                <path class="npc-wire" d="M470 55v10M470 125v10M470 195v30M470 225v10M470 295v10M470 365v30M470 225H415M540 145v-20H470M540 205v20M540 245v-20M540 305v-10H470"/>
+                <use href="#igbtWithDiode" x="441" y="65" width="58" height="60"/><use href="#igbtWithDiode" x="441" y="135" width="58" height="60"/><use href="#igbtWithDiode" x="441" y="235" width="58" height="60"/><use href="#igbtWithDiode" x="441" y="305" width="58" height="60"/>
+                <use href="#clampDiode" x="525" y="145" width="30" height="60" data-clamp="upper-C"/><use href="#clampDiode" x="525" y="245" width="30" height="60" data-clamp="lower-C"/><circle class="npc-node" cx="470" cy="125" r="3"/><circle class="npc-node" cx="470" cy="225" r="3"/><circle class="npc-node" cx="470" cy="295" r="3"/><circle class="npc-node" cx="540" cy="225" r="3"/><circle class="phase-output" id="phase-C-output" cx="415" cy="225" r="4"/>
+                <text class="igbt-name" x="427" y="95">T1C</text><text class="igbt-name" x="427" y="165">T2C</text><text class="igbt-name" x="427" y="265">T3C</text><text class="igbt-name" x="427" y="335">T4C</text><text class="phase-name" x="398" y="229">C</text><text class="npc-net-label" x="544" y="229">O</text>
+              </g>
+              <text class="npc-annotation" x="110" y="425">IGBT + 反并联二极管</text><text class="npc-annotation" x="390" y="425">中点钳位二极管：上支路 O→T1/T2 节点，下支路 T3/T4 节点→O</text>
+            </g>
+            <g class="device-state is-on" data-component="split-dc-link" transform="translate(1145 115)"><rect class="svg-device" width="100" height="310" rx="12"/><text class="svg-label" x="50" y="20" text-anchor="middle">分裂直流母线</text><path class="npc-rail" d="M14 55H86M14 155H86M14 255H86"/><path class="svg-symbol" d="M50 55v32m-22 0h44m-44 12h44m-22 0v56m0 0v32m-22 0h44m-44 12h44m-22 0v56"/><text class="npc-net-label" x="8" y="59">P</text><text class="npc-net-label" x="8" y="159">O</text><text class="npc-net-label" x="8" y="259">N</text><text class="svg-value" id="pcsUpperCapSvg" x="50" y="280" text-anchor="middle">C1 -- V</text><text class="svg-value" id="pcsLowerCapSvg" x="50" y="297" text-anchor="middle">C2 -- V</text></g>
+            <g class="device-state is-unknown" data-component="dc-precharge" transform="translate(1260 190)"><rect class="svg-device" width="95" height="160" rx="12"/><text class="svg-label" x="47" y="20" text-anchor="middle">直流充电</text><path class="svg-symbol" d="M10 80h21m21 0h33M31 80l21-15M18 80v45h24m22 0h21M42 125l6-10 8 20 8-20 8 10"/><text class="svg-sub" x="47" y="150" text-anchor="middle">开关 · 电阻 · 旁路</text></g>
+            <g class="device-state is-unknown" data-component="dc-contactors" transform="translate(1370 190)"><rect class="svg-device" width="60" height="160" rx="12"/><text class="svg-label" x="30" y="20" text-anchor="middle">接触器</text><path class="svg-symbol" d="M7 67h17m18 0h11M24 67l19-14M7 109h17m18 0h11M24 109l19-14"/><text class="svg-sub" x="30" y="148" text-anchor="middle">DC+ / DC−</text></g>
+            <g class="device-state is-unknown" data-component="dc-fuse" transform="translate(1440 205)"><title>直流快熔</title><rect class="svg-device" width="50" height="130" rx="12"/><text class="svg-label" x="25" y="19" text-anchor="middle">快熔</text><path class="svg-symbol" d="M6 65h9l5-12 9 24 6-12h9"/><text class="svg-value" id="pcsDcVoltageSvg" x="25" y="116" text-anchor="middle">-- V</text></g>
+            <text class="svg-sub" x="750" y="510" text-anchor="middle">交流侧三相端口 A/B/C ← 双向变流 → 直流母线 P/O/N</text>
+          </svg>
+          <div class="topology-legend"><span><i style="background:var(--green)"></i>反馈闭合</span><span><i style="background:#54718c"></i>反馈断开</span><span><i style="background:var(--amber)"></i>无独立反馈点</span><span><i style="background:var(--cyan)"></i>实时能流</span></div>
+        </div>
+        <div class="engineering-grid" id="pcsPointPanel"></div>
+        <div class="engineering-note">开关状态采用地址 188“开关反馈”：bit0 网侧接触器、bit1 交流充电接触器、bit2 直流正极接触器、bit3 直流充电接触器、bit4 风机接触器、bit5 直流负极接触器。浪涌保护器、旁路开关和快熔尚无独立反馈点，界面按拓扑部件展示但不虚构状态。</div>
+      </section>
+
+      <section class="asset-view engineering-view glass" data-view="bms" hidden>
+        <div class="engineering-head"><div><h2>VRFB BMS 系统拓扑</h2><p id="bmsViewCaption">5串3并 · 15电堆 · 管路与传感器联动</p></div><div class="channel-selector"><button class="settings-button" id="bmsLiveChannel">真实Modbus通道</button><button class="settings-button" id="bmsMockChannel">模拟数据通道</button><span class="channel-target" id="bmsChannelTarget">通道检查中</span></div></div>
+        <div class="unit-selector" id="bmsUnitSelector" aria-label="BMS设备选择"></div>
+        <div class="bms-layout">
+          <div class="topology-visual">
+            <svg class="vrfb-topology" viewBox="0 0 1100 470" role="img" aria-label="全钒液流电池双罐双泵及5串3并电堆拓扑">
+              <defs>
+                <linearGradient id="tankShell" x2="1" y2="1"><stop stop-color="rgba(235,245,252,.38)"/><stop offset=".45" stop-color="rgba(112,142,164,.08)"/><stop offset="1" stop-color="rgba(229,241,249,.24)"/></linearGradient>
+                <linearGradient id="positiveLiquid" x2="0" y2="1"><stop stop-color="#ffe45c"/><stop offset="1" stop-color="#bb7912"/></linearGradient>
+                <linearGradient id="negativeLiquid" x2="0" y2="1"><stop stop-color="#be67ff"/><stop offset="1" stop-color="#5020ad"/></linearGradient>
+                <linearGradient id="positivePipe"><stop stop-color="#ffe45c"/><stop offset="1" stop-color="#ef9d22"/></linearGradient>
+                <linearGradient id="negativePipe"><stop stop-color="#be67ff"/><stop offset="1" stop-color="#7044ff"/></linearGradient>
+                <linearGradient id="pumpMetal" x2="1" y2="1"><stop stop-color="#dbe9f2"/><stop offset=".45" stop-color="#526c7e"/><stop offset="1" stop-color="#b9cbd6"/></linearGradient>
+                <linearGradient id="stackBody" x2="1" y2="1"><stop stop-color="#1d4059"/><stop offset="1" stop-color="#071520"/></linearGradient>
+                <clipPath id="positiveTankClip"><rect x="74" y="100" width="190" height="226" rx="18"/></clipPath><clipPath id="negativeTankClip"><rect x="836" y="100" width="190" height="226" rx="18"/></clipPath>
+              </defs>
+              <path class="process-pipe positive" d="M170 324V390H390V330"/><path class="process-pipe positive" d="M390 112V63H170V99"/>
+              <path class="process-pipe negative" d="M930 324V390H710V330"/><path class="process-pipe negative" d="M710 112V63H930V99"/>
+              <path class="electrical-link" d="M490 82V35H610V82"/><path class="sensor-bus" d="M360 353V435H740V353"/>
+              <g data-component="positive-tank"><rect class="tank-shell" x="62" y="82" width="214" height="270" rx="30"/><rect class="tank-liquid-positive" id="positiveLiquidSvg" x="74" y="165" width="190" height="161" clip-path="url(#positiveTankClip)"/><ellipse class="tank-top" cx="169" cy="92" rx="106" ry="25"/><ellipse fill="rgba(255,226,75,.58)" id="positiveLiquidTopSvg" cx="169" cy="165" rx="94" ry="18"/><path class="tank-highlight" d="M88 116q18-18 34-5v194q-16 8-34-8z"/><text class="svg-label" x="169" y="42" text-anchor="middle">正极储液罐</text><text class="svg-value" id="positiveLevelSvg" x="169" y="374" text-anchor="middle">液位 -- raw</text></g>
+              <g data-component="negative-tank"><rect class="tank-shell" x="824" y="82" width="214" height="270" rx="30"/><rect class="tank-liquid-negative" id="negativeLiquidSvg" x="836" y="169" width="190" height="157" clip-path="url(#negativeTankClip)"/><ellipse class="tank-top" cx="931" cy="92" rx="106" ry="25"/><ellipse fill="rgba(174,90,255,.58)" id="negativeLiquidTopSvg" cx="931" cy="169" rx="94" ry="18"/><path class="tank-highlight" d="M850 116q18-18 34-5v194q-16 8-34-8z"/><text class="svg-label" x="931" y="42" text-anchor="middle">负极储液罐</text><text class="svg-value" id="negativeLevelSvg" x="931" y="374" text-anchor="middle">液位 -- raw</text></g>
+              <g data-component="positive-pump" transform="translate(276 356)"><rect class="pump-body" width="94" height="52" rx="24"/><circle class="pump-wheel" cx="27" cy="26" r="16"/><path class="svg-symbol" d="M48 17h30v18H48"/><text class="svg-value" id="positiveFlowSvg" x="47" y="72" text-anchor="middle">-- raw</text></g>
+              <g data-component="negative-pump" transform="translate(730 356)"><rect class="pump-body" width="94" height="52" rx="24"/><circle class="pump-wheel" cx="67" cy="26" r="16"/><path class="svg-symbol" d="M16 17h30v18H16"/><text class="svg-value" id="negativeFlowSvg" x="47" y="72" text-anchor="middle">-- raw</text></g>
+              <g id="vrfbStackMatrix" data-layout="5-series-3-parallel" transform="translate(390 82)"><rect class="stack-frame" width="320" height="268" rx="16"/><text class="svg-label" x="160" y="24" text-anchor="middle">钒电池电堆矩阵 · 5串 × 3并</text><text class="svg-sub" x="160" y="43" text-anchor="middle">15 STACKS / MEMBRANE &amp; ELECTRODE ASSEMBLY</text>
+                <g id="vrfbStackCells"></g>
+              </g>
+              <g transform="translate(500 4)"><rect class="svg-device" width="100" height="38" rx="10"/><text class="svg-label" x="50" y="16" text-anchor="middle">PCS DC</text><text class="svg-sub" x="50" y="30" text-anchor="middle">电气连接</text></g>
+              <g transform="translate(500 420)"><rect class="svg-device" width="100" height="38" rx="10"/><text class="svg-label" x="50" y="16" text-anchor="middle">BMS</text><text class="svg-sub" x="50" y="30" text-anchor="middle">传感器总线</text></g>
+              <g transform="translate(285 86)"><circle class="sensor-badge" r="20"/><text class="sensor-copy" y="3" text-anchor="middle">P+</text></g><g transform="translate(815 86)"><circle class="sensor-badge" r="20"/><text class="sensor-copy" y="3" text-anchor="middle">P−</text></g><g transform="translate(330 330)"><circle class="sensor-badge" r="20"/><text class="sensor-copy" y="3" text-anchor="middle">F+</text></g><g transform="translate(770 330)"><circle class="sensor-badge" r="20"/><text class="sensor-copy" y="3" text-anchor="middle">F−</text></g><g transform="translate(550 375)"><circle class="sensor-badge" r="20"/><text class="sensor-copy" y="3" text-anchor="middle">T</text></g>
+            </svg>
+            <div class="topology-legend"><span><i style="background:#efb92e"></i>正极电解液回路</span><span><i style="background:#9855ff"></i>负极电解液回路</span><span><i style="background:var(--amber)"></i>PCS 电气连接</span><span><i style="background:var(--blue)"></i>BMS 传感器总线</span></div>
+          </div>
+          <div class="bms-detail-grid"><div class="stack-bank"><div class="panel-title">分区电压明细<small>DATA233～DATA247 / DATA249～DATA263</small></div><div class="stack-grid" id="stackGrid"></div><div class="zone-strip" id="zoneVoltagePanel">A区 DATA233～DATA247 · B区 DATA249～DATA263</div></div><div class="hydraulic-loop"><div class="panel-title">过程测量<small>FLOW · LEVEL · PRESSURE · TEMPERATURE</small></div><div id="hydraulicPanel"></div><div class="engineering-note">流量与液位已写入 V1.2 备用变量；单位、量程和比例系数待 BMS 协议确认，当前按 raw 显示。</div></div></div>
+        </div>
+        <div class="engineering-grid" id="bmsPointPanel" style="margin-top:14px"></div>
+      </section>
+
+      <section class="asset-view engineering-view glass" data-view="electrolyte" hidden>
+        <div class="engineering-head"><div><h2>电解液循环监测</h2><p>正负极储液罐、循环泵、管路压力、温度、流量与液位</p></div><span class="chip">BMS SENSOR BUS</span></div>
+        <div class="hydraulic-loop" id="electrolytePanel"></div>
+      </section>
+
+      <section class="asset-view engineering-view glass" data-view="protocol" hidden>
+        <div class="engineering-head"><div><h2>通信与点表诊断</h2><p>只读监视、地址映射和通信质量</p></div><span class="chip">CONTROL DISABLED</span></div>
+        <div class="protocol-grid">
+          <div class="protocol-card"><h3>Modbus TCP</h3><dl><dt>设备端点</dt><dd>按设备独立配置</dd><dt>配置入口</dt><dd>参数设置</dd><dt>设备类型</dt><dd>PCS / BMS / 共用</dd><dt>读取功能码</dt><dd>FC03</dd><dt>写入功能码</dt><dd>FC06（当前禁用）</dd></dl></div>
+          <div class="protocol-card"><h3>点表绑定</h3><dl><dt>版本</dt><dd>EMS通信点表V1.2</dd><dt>地址约定</dt><dd>表内1基 / 协议0基</dd><dt>A区电压</dt><dd>DATA233～DATA247</dd><dt>B区电压</dt><dd>DATA249～DATA263</dd><dt>通信状态</dt><dd id="protocolQuality">--</dd></dl></div>
+        </div>
+      </section>
+
+      <section class="asset-view engineering-view glass" data-view="reports" hidden>
+        <div class="engineering-head"><div><h2>运行与收益报表</h2><p>日电量、往返效率、缺测率与峰谷收益双口径核算</p></div><button class="settings-button" id="reportCsvExport" disabled>导出 CSV</button></div>
+        <div class="report-grid">
+          <article class="report-basis"><h3>PCC结算表计</h3><p>业主财务结算唯一口径；必须具备完整进/出电量、数据质量和分时电价。</p><span class="report-status" id="settlementStatus">不可结算</span><div class="report-metrics"><div class="report-metric"><span>充电量</span><b id="settlementCharge">-- kWh</b></div><div class="report-metric"><span>放电量</span><b id="settlementDischarge">-- kWh</b></div><div class="report-metric"><span>往返效率</span><b id="settlementEfficiency">-- %</b></div><div class="report-metric"><span>净收益</span><b id="settlementRevenue">-- 元</b></div></div></article>
+          <article class="report-basis"><h3>PCS运行分析</h3><p>汇总各PCS充放电量，用于设备效率和偏差分析，不替代关口结算。</p><span class="report-status" id="operationalStatus">仅供分析</span><div class="report-metrics"><div class="report-metric"><span>充电量</span><b id="operationalCharge">-- kWh</b></div><div class="report-metric"><span>放电量</span><b id="operationalDischarge">-- kWh</b></div><div class="report-metric"><span>往返效率</span><b id="operationalEfficiency">-- %</b></div><div class="report-metric"><span>缺测率</span><b id="operationalMissing">-- %</b></div></div></article>
+        </div>
+        <div class="report-caveat" id="reportCaveat">当前工程尚未配置PCC结算表计，因此财务结果明确标记为“不可结算”；PCS合计不得作为收益结算依据。历史数据接口就绪后，本页接收日报数据并开放CSV导出。</div>
+      </section>
+
+      <section class="asset-view engineering-view settings-view glass" data-view="settings" hidden>
+        <div class="engineering-head">
+          <div><h2>通信参数设置</h2><p>PCS / BMS 独立端点、轮询参数、TCP转RTU网关记录与FC03只读测试</p></div>
+          <div class="settings-toolbar">
+            <button class="settings-button" id="configReload">重新读取</button>
+            <button class="settings-button" id="configAddPcs">+ PCS</button>
+            <button class="settings-button" id="configAddBms">+ BMS</button>
+            <button class="settings-button" id="configExport">导出JSON</button>
+            <label class="settings-button file-button">导入JSON<input id="configImport" type="file" accept="application/json,.json"></label>
+            <button class="settings-button primary" id="configSave">保存参数</button>
+          </div>
+        </div>
+        <p class="settings-note"><strong>安全说明：</strong>本页只保存通讯参数并执行FC03读取测试，不启用FC06/FC16写操作。Modbus TCP没有波特率；“波特率、校验位、停止位”只用于<strong>TCP转RTU网关</strong>的串口侧记录，实际值还需同步设置到网关。</p>
+        <div class="settings-summary">
+          <div class="settings-field"><label>默认响应超时 / ms</label><input id="defaultTimeout" type="number" min="100" max="60000"></div>
+          <div class="settings-field"><label>默认轮询周期 / ms</label><input id="defaultPolling" type="number" min="100" max="60000"></div>
+          <div class="settings-field"><label>默认重连间隔 / ms</label><input id="defaultReconnect" type="number" min="500" max="300000"></div>
+          <div class="settings-field"><label>FC03单次最大寄存器</label><input id="defaultMaxRegisters" type="number" min="1" max="125"></div>
+          <div class="settings-field"><label>数据WebSocket端口</label><input id="settingsWsPort" type="number" min="1" max="65535"></div>
+        </div>
+        <div class="settings-status" id="configStatus">尚未读取配置</div>
+        <div class="device-settings-list" id="commDeviceRows"><div class="settings-empty">正在读取通讯配置…</div></div>
+      </section>
+    </main>
+
+    <aside class="right-stack">
+      <section class="panel glass dispatch-card"><div class="panel-head"><div class="panel-title">储能可用度<small>ENERGY AVAILABILITY</small></div><div class="panel-index">05</div></div><div class="dispatch-ring" id="socRing"><div class="ring-copy"><b id="ringSoc">--</b><span>AVERAGE SOC</span></div></div><div class="dispatch-meta"><div class="mini-stat"><span>SOH</span><b id="avgSoh">-- %</b></div><div class="mini-stat"><span>电池在线</span><b id="batteryOnline">-- / --</b></div></div></section>
+      <section class="panel glass alarm-stream"><div class="panel-head"><div class="panel-title">事件与告警<small>EVENT STREAM</small></div><div class="panel-index">06</div></div><div class="alarm-list" id="alarmList"></div></section>
+      <section class="panel glass device-inspector"><div class="panel-head"><div class="panel-title">设备透视<small>DEVICE INSPECTOR</small></div><div class="panel-index">07</div></div><div id="inspector"></div></section>
+    </aside>
+  </section>
+  <footer class="footer-strip"><span><b>VRFB EMS PREMIUM</b><em id="lastUpdate">LAST UPDATE --</em></span><span class="legend"><i style="background:var(--green)"></i>正常 <i style="background:var(--amber)"></i>告警 <i style="background:var(--red)"></i>故障 <i style="background:var(--cyan)"></i>能流</span></footer>
+</div>
+<script>
+const state={data:null,selectedPcsId:null,selectedBmsId:null,activeLayer:'overview',chart:null,ws:null,reconnect:null,config:null,settingsLoaded:false,report:null,expectedSource:null,currentWsUrl:null,mockWsUrl:'ws://127.0.0.1:8080'};
+const channelGuard=window.EmsChannelGuard;
+const el=id=>document.getElementById(id);
+const finite=value=>Number.isFinite(value);
+const fmt=(value,digits=1,fallback='--')=>finite(value)?Number(value).toFixed(digits):fallback;
+const text=(id,value)=>{const node=el(id);if(node)node.textContent=value};
+function setClock(){const now=new Date();text('clock',now.toLocaleTimeString('zh-CN',{hour12:false}));text('date',now.toLocaleDateString('zh-CN',{weekday:'long',year:'numeric',month:'2-digit',day:'2-digit'}));}
+setClock();setInterval(setClock,1000);
+
+function renderAssets(data){
+  const pcs=data.pcsUnits||[],bats=data.batteryGroups||[];
+  const groups=[['overview','35kV 母线 / 全站','一次系统与能量总览','⌁'],['pcs','PCS 变流器',`${pcs.length} 台 NPC 三电平设备`,'◈'],['bms','BMS 电池系统',`${bats.length} 套 · 每套15电堆`,'▦'],['electrolyte','电解液循环','泵阀、管路与储液罐','◌'],['protocol','通信与点表','Modbus TCP · V1.2','◇'],['reports','运行与收益报表','PCC结算 / PCS分析','▤'],['settings','参数设置','设备端点与只读诊断','⚙']];
+  el('assetTree').innerHTML=groups.map(g=>`<button class="asset-row ${g[0]===state.activeLayer?'active':''}" data-layer="${g[0]}"><div class="asset-icon">${g[3]}</div><div class="asset-copy"><b>${g[1]}</b><span>${g[2]}</span></div><i class="asset-state"></i></button>`).join('');
+  el('assetTree').querySelectorAll('[data-layer]').forEach(node=>node.addEventListener('click',()=>selectAssetLayer(node.dataset.layer)));
+  const quality=data.meta?.quality||'BAD_COMM';
+  const online=pcs.filter(p=>finite(p.P)).length;
+  const validQuality=quality==='GOOD'||quality==='SIMULATED';
+  const health=[['通信链路',validQuality?100:quality==='PARTIAL'?68:18],['PCS 可用率',pcs.length?online/pcs.length*100:0],['电池可用率',bats.length?bats.filter(b=>b.status==='on').length/bats.length*100:0],['数据完整度',validQuality?96:quality==='PARTIAL'?72:24]];
+  el('healthBars').innerHTML=health.map(([name,value])=>`<div class="health-item"><div class="health-label"><span>${name}</span><b>${fmt(value,0)}%</b></div><div class="health-track"><div class="health-fill" style="width:${Math.max(0,Math.min(100,value))}%"></div></div></div>`).join('');
+}
+
+function selectAssetLayer(layer){
+  state.activeLayer=layer;
+  document.querySelectorAll('[data-view]').forEach(view=>{view.hidden=view.dataset.view!==layer});
+  document.querySelectorAll('[data-layer]').forEach(node=>node.classList.toggle('active',node.dataset.layer===layer));
+  if(layer==='overview'&&state.chart)setTimeout(()=>state.chart.resize(),0);
+  if(layer==='settings'&&!state.settingsLoaded)loadCommunicationConfig();
+  if(state.data)renderEngineeringViews(state.data);
+}
+
+function metric(label,value,unit=''){
+  return `<div class="engineering-metric"><span>${label}</span><b>${finite(value)?fmt(value,2)+(unit?' '+unit:''):'--'}</b></div>`;
+}
+
+function switchMetric(label,value){
+  return `<div class="engineering-metric"><span>${label}</span><b style="color:${value===true?'var(--green)':value===false?'var(--muted)':'var(--amber)'}">${value===true?'● 闭合':value===false?'○ 断开':'-- 无数据'}</b></div>`;
+}
+
+function setDeviceState(component,value){
+  const node=document.querySelector(`[data-component="${component}"]`);
+  if(!node)return;
+  node.classList.remove('is-on','is-off','is-unknown');
+  node.classList.add(value===true?'is-on':value===false?'is-off':'is-unknown');
+}
+
+function updatePcsTopology(pcs){
+  const telemetry=pcs?.telemetry||{},sw=telemetry.switches||{};
+  text('pcsGridVoltageSvg',`${fmt(telemetry.gridVoltage?.AB,1)} V`);
+  text('pcsInverterVoltageSvg',`${fmt(telemetry.inverterVoltage?.AB,1)} V`);
+  text('pcsUpperCapSvg',`C1 ${fmt(telemetry.npc?.upperCapVoltage,1)} V`);
+  text('pcsLowerCapSvg',`C2 ${fmt(telemetry.npc?.lowerCapVoltage,1)} V`);
+  text('pcsDcVoltageSvg',`${fmt(telemetry.dc?.voltage,1)} V`);
+  setDeviceState('ac-precharge',sw.acPrechargeContactor);
+  setDeviceState('dc-precharge',sw.dcPrechargeContactor);
+  const dcContactors=sw.dcPositiveContactor===true&&sw.dcNegativeContactor===true?true:sw.dcPositiveContactor===false&&sw.dcNegativeContactor===false?false:null;
+  setDeviceState('dc-contactors',dcContactors);
+  const topology=document.querySelector('.pcs-topology');
+  if(topology)topology.classList.toggle('paused',!finite(pcs?.P)||pcs.P===0);
+}
+
+function setTankLevel(liquidId,topId,value){
+  const liquid=el(liquidId),top=el(topId);
+  if(!liquid||!top)return;
+  const percent=finite(value)?Math.max(0,Math.min(100,value)):0;
+  const height=226*percent/100,y=326-height;
+  liquid.setAttribute('y',String(y));liquid.setAttribute('height',String(height));top.setAttribute('cy',String(y));
+}
+
+function updateVrfbTopology(bms){
+  const h=bms?.hydraulics||{},pos=h.positive||{},neg=h.negative||{};
+  text('positiveLevelSvg',`液位 ${fmt(pos.level,1)} raw`);text('negativeLevelSvg',`液位 ${fmt(neg.level,1)} raw`);
+  text('positiveFlowSvg',`流量 ${fmt(pos.flow,1)} raw`);text('negativeFlowSvg',`流量 ${fmt(neg.flow,1)} raw`);
+  setTankLevel('positiveLiquidSvg','positiveLiquidTopSvg',pos.level);setTankLevel('negativeLiquidSvg','negativeLiquidTopSvg',neg.level);
+  const cells=el('vrfbStackCells');
+  if(cells){
+    cells.innerHTML=Array.from({length:15},(_,index)=>{const col=index%5,row=Math.floor(index/5),x=24+col*57,y=62+row*62;return `<g transform="translate(${x} ${y})"><rect class="stack-cell-svg" width="45" height="43" rx="5"/><text class="sensor-copy" x="22" y="18" text-anchor="middle">S${String(index+1).padStart(2,'0')}</text><text class="svg-sub" x="22" y="33" text-anchor="middle">${fmt(bms?.zoneVoltages?.A?.[index],2)} V</text></g>`}).join('');
+  }
+  const flowing=finite(pos.flow)&&finite(neg.flow)&&(pos.flow!==0||neg.flow!==0),topology=document.querySelector('.vrfb-topology');
+  if(topology)topology.classList.toggle('paused',!flowing);
+}
+
+function hydraulicMarkup(bms){
+  const h=bms?.hydraulics||{},pos=h.positive||{},neg=h.negative||{};
+  return `<div class="hydraulic-line"><div class="tank">正极储液罐<br><b>${fmt(pos.level,1)} raw</b></div><i class="pipe"></i><div class="pump">正极循环泵<br>流量 ${fmt(pos.flow,1)} raw</div></div><div class="hydraulic-line"><div class="tank">负极储液罐<br><b>${fmt(neg.level,1)} raw</b></div><i class="pipe"></i><div class="pump">负极循环泵<br>流量 ${fmt(neg.flow,1)} raw</div></div><div class="engineering-grid" style="grid-template-columns:repeat(2,1fr);margin-top:12px">${metric('正极管路压力1',pos.pipePressure1,'raw')}${metric('负极管路压力1',neg.pipePressure1,'raw')}${metric('电解液温度',bms?.temperature?.electrolyte,'°C')}${metric('BMS柜温度',bms?.temperature?.cabinet,'°C')}</div>`;
+}
+
+function renderUnitSelectors(data){
+  const pcs=data.pcsUnits||[],batteries=data.batteryGroups||[];
+  if(!pcs.some(item=>item.id===state.selectedPcsId))state.selectedPcsId=pcs[0]?.id||null;
+  if(!batteries.some(item=>item.id===state.selectedBmsId))state.selectedBmsId=batteries[0]?.id||null;
+  el('pcsUnitSelector').innerHTML=pcs.map(item=>`<button class="unit-tab ${item.id===state.selectedPcsId?'active':''}" data-pcs-unit="${item.id}">${item.id}<small>UNIT ${String(item.unitId||'--').padStart(2,'0')}</small></button>`).join('');
+  el('bmsUnitSelector').innerHTML=batteries.map(item=>`<button class="unit-tab ${item.id===state.selectedBmsId?'active':''}" data-bms-unit="${item.id}">${item.id}<small>UNIT ${String(item.unitId||'--').padStart(2,'0')}</small></button>`).join('');
+  el('pcsUnitSelector').querySelectorAll('[data-pcs-unit]').forEach(node=>node.addEventListener('click',()=>{state.selectedPcsId=node.dataset.pcsUnit;renderFleet(data);renderEngineeringViews(data)}));
+  el('bmsUnitSelector').querySelectorAll('[data-bms-unit]').forEach(node=>node.addEventListener('click',()=>{state.selectedBmsId=node.dataset.bmsUnit;renderEngineeringViews(data)}));
+}
+
+function renderEngineeringViews(data){
+  renderUnitSelectors(data);
+  const pcs=(data.pcsUnits||[]).find(item=>item.id===state.selectedPcsId)||(data.pcsUnits||[])[0];
+  const battery=(data.batteryGroups||[]).find(item=>item.id===state.selectedBmsId)||(data.batteryGroups||[])[0];
+  const telemetry=pcs?.telemetry||{},sw=telemetry.switches||{},bms=battery?.bms||{};
+  text('pcsViewCaption',pcs?`${pcs.id} · ${pcs.type||'NPC-3L'} · Modbus从站 ${pcs.unitId||'--'}`:'暂无 PCS 数据');
+  updatePcsTopology(pcs);
+  el('pcsPointPanel').innerHTML=[metric('网侧AB电压',telemetry.gridVoltage?.AB,'V'),metric('逆变侧AB电压',telemetry.inverterVoltage?.AB,'V'),metric('直流电压',telemetry.dc?.voltage,'V'),metric('直流电流',telemetry.dc?.current,'A'),metric('NPC上电容',telemetry.npc?.upperCapVoltage,'V'),metric('NPC下电容',telemetry.npc?.lowerCapVoltage,'V'),switchMetric('网侧接触器',sw.gridContactor),switchMetric('交流充电接触器',sw.acPrechargeContactor),switchMetric('直流正极接触器',sw.dcPositiveContactor),switchMetric('直流充电接触器',sw.dcPrechargeContactor),switchMetric('风机接触器',sw.fanContactor),switchMetric('直流负极接触器',sw.dcNegativeContactor)].join('');
+  text('bmsViewCaption',battery?`${battery.id} · 配对 ${battery.pcsId} · Modbus从站 ${battery.unitId||'--'} · 5串3并 · 15电堆`:'暂无 BMS 数据');
+  updateVrfbTopology(bms);
+  el('stackGrid').innerHTML=Array.from({length:15},(_,index)=>`<div class="stack-cell">电堆 ${String(index+1).padStart(2,'0')}<br>A ${fmt(bms.zoneVoltages?.A?.[index],2)} V<br>B ${fmt(bms.zoneVoltages?.B?.[index],2)} V</div>`).join('');
+  el('zoneVoltagePanel').textContent=`A区 DATA233～DATA247：${(bms.zoneVoltages?.A||[]).map(v=>fmt(v,2)).join(' / ')}\nB区 DATA249～DATA263：${(bms.zoneVoltages?.B||[]).map(v=>fmt(v,2)).join(' / ')}`;
+  const hydraulic=hydraulicMarkup(bms);el('hydraulicPanel').innerHTML=hydraulic;el('electrolytePanel').innerHTML=hydraulic;
+  el('bmsPointPanel').innerHTML=[metric('SOC',bms.soc,'%'),metric('电堆直流电压',bms.dc?.voltage,'V'),metric('充放电直流电流',bms.dc?.current,'A'),metric('最高单体电压',bms.cellVoltage?.max,'V'),metric('最低单体电压',bms.cellVoltage?.min,'V'),metric('泵阀状态字',bms.pumpValveStatusWord)].join('');
+  text('protocolQuality',`${data.meta?.quality||'BAD_COMM'} · ${data.meta?.source==='live'?'实时':'模拟/离线'}`);
+}
+
+function renderFleet(data){
+  const pcs=data.pcsUnits||[];
+  if(!pcs.some(item=>item.id===state.selectedPcsId))state.selectedPcsId=pcs[0]?.id||null;
+  el('fleetGrid').innerHTML=pcs.map((p,index)=>{const power=finite(p.P)?p.P:0;const color=power<0?'var(--cyan)':'var(--green)';const rating=index<8?500:1000;const width=Math.min(100,Math.abs(power)/rating*100);return `<button class="pcs-card ${p.id===state.selectedPcsId?'active':''}" data-pcs="${p.id}"><div class="pcs-name">${p.id}</div><div class="pcs-power" style="color:${color}">${finite(p.P)?(p.P>0?'+':'')+fmt(p.P,0):'--'} kW</div><div class="pcs-bar"><i style="width:${width}%;background:${color}"></i></div></button>`}).join('');
+  el('fleetGrid').querySelectorAll('[data-pcs]').forEach(node=>node.addEventListener('click',()=>{state.selectedPcsId=node.dataset.pcs;renderFleet(data);renderEngineeringViews(data)}));
+  renderInspector(data);
+}
+
+function renderInspector(data){
+  const pcs=(data.pcsUnits||[]).find(p=>p.id===state.selectedPcsId)||(data.pcsUnits||[])[0];
+  if(!pcs){el('inspector').innerHTML='<div class="alarm-empty">暂无设备数据</div>';return}
+  const battery=(data.batteryGroups||[]).find(b=>b.pcsId===pcs.id);
+  el('inspector').innerHTML=`<div class="inspector-head"><div class="inspector-id">${pcs.id}</div><div class="inspector-tag">● ONLINE · ${pcs.type||'--'}</div></div><div class="inspector-grid"><div class="inspector-cell"><span>有功功率</span><b>${fmt(pcs.P,1)} kW</b></div><div class="inspector-cell"><span>无功功率</span><b>${fmt(pcs.Q,1)} kVar</b></div><div class="inspector-cell"><span>直流电压</span><b>${fmt(pcs.Vdc,1)} V</b></div><div class="inspector-cell"><span>直流电流</span><b>${fmt(pcs.Idc,1)} A</b></div><div class="inspector-cell"><span>配对BMS SOC</span><b>${fmt(battery?.soc,1)} %</b></div><div class="inspector-cell"><span>电池温度</span><b>${fmt(battery?.T,1)} °C</b></div></div>`;
+}
+
+function renderAlarms(data){
+  const alarms=data.alarms||[];text('alarmCount',String(alarms.length));
+  if(!alarms.length){el('alarmList').innerHTML='<div class="alarm-empty">✓ 当前无活跃告警<br><small>系统运行平稳</small></div>';return}
+  el('alarmList').innerHTML=alarms.slice(0,5).map(a=>`<div class="alarm-item"><i class="alarm-level" style="background:${a.severity==='critical'?'var(--red)':'var(--amber)'}"></i><div class="alarm-copy"><b>${a.msg||a.code||'设备告警'}</b><span>${a.device||'全站'} · ${a.severity||'warning'}</span></div><span class="alarm-time">${a.time||'--:--'}</span></div>`).join('');
+}
+
+function renderTrend(data){
+  if(!window.echarts)return;
+  if(!state.chart)state.chart=echarts.init(el('trendChart'));
+  const powers=data.powerHistory||[],socs=data.socHistory||[];const count=Math.max(powers.length,socs.length,24);const labels=Array.from({length:count},(_,i)=>String((24-count+i+24)%24).padStart(2,'0')+':00');
+  state.chart.setOption({animationDuration:500,grid:{left:40,right:38,top:16,bottom:26},tooltip:{trigger:'axis',backgroundColor:'rgba(8,17,29,.96)',borderColor:'rgba(67,231,255,.25)',textStyle:{color:'#dcecff',fontSize:10}},legend:{right:4,top:0,textStyle:{color:'#7890a8',fontSize:9}},xAxis:{type:'category',data:labels,axisLine:{lineStyle:{color:'#20354a'}},axisLabel:{color:'#586f84',fontSize:8,interval:3},axisTick:{show:false}},yAxis:[{type:'value',name:'MW',nameTextStyle:{color:'#536b82'},splitLine:{lineStyle:{color:'rgba(100,145,183,.08)'}},axisLabel:{color:'#586f84',fontSize:8}},{type:'value',min:0,max:100,name:'SOC%',nameTextStyle:{color:'#536b82'},splitLine:{show:false},axisLabel:{color:'#586f84',fontSize:8}}],series:[{name:'功率',type:'bar',data:powers.map(v=>finite(v)?v/1000:null),barWidth:5,itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#43e7ff'},{offset:1,color:'rgba(67,231,255,.08)'}]),borderRadius:[3,3,0,0]}},{name:'SOC',type:'line',yAxisIndex:1,data:socs,smooth:true,symbol:'none',lineStyle:{color:'#9b7bff',width:2},areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(155,123,255,.22)'},{offset:1,color:'rgba(155,123,255,0)'}])}}]});
+}
+
+function renderReport(report){
+  state.report=report||null;const settlement=report?.settlement||{},operational=report?.operational||{};const settleable=settlement.status==='SETTLEABLE';
+  text('settlementStatus',settleable?'可结算':'不可结算');el('settlementStatus').classList.toggle('valid',settleable);
+  text('settlementCharge',`${fmt(settlement.chargeKWh,2)} kWh`);text('settlementDischarge',`${fmt(settlement.dischargeKWh,2)} kWh`);text('settlementEfficiency',`${fmt(settlement.roundTripEfficiencyPct,2)} %`);text('settlementRevenue',`${fmt(settlement.netRevenue,2)} 元`);
+  text('operationalStatus','仅供分析');text('operationalCharge',`${fmt(operational.chargeKWh,2)} kWh`);text('operationalDischarge',`${fmt(operational.dischargeKWh,2)} kWh`);text('operationalEfficiency',`${fmt(operational.roundTripEfficiencyPct,2)} %`);text('operationalMissing',`${fmt(operational.missingRatePct,2)} %`);
+  text('reportCaveat',settlement.note||'当前工程尚未配置PCC结算表计，因此财务结果明确标记为“不可结算”；PCS合计不得作为收益结算依据。');el('reportCsvExport').disabled=!report;
+}
+
+function exportDailyReport(){
+  if(!state.report)return;const columns=['date','basis','status','chargeKWh','dischargeKWh','roundTripEfficiencyPct','missingRatePct','chargeCost','dischargeRevenue','netRevenue','note'];const cell=value=>{const raw=value??'';const valueText=String(raw);return /[",\r\n]/.test(valueText)?`"${valueText.replaceAll('"','""')}"`:valueText};const rows=[state.report.settlement,state.report.operational].map(row=>columns.map(column=>cell(column==='date'?state.report.date:row?.[column])).join(','));const blob=new Blob(['\uFEFF'+columns.join(',')+'\r\n'+rows.join('\r\n')+'\r\n'],{type:'text/csv;charset=utf-8'});const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=`EMS日报-${state.report.date}.csv`;link.click();URL.revokeObjectURL(link.href);
+}
+
+function render(data){
+  state.data=data;const station=data.station||{},pcs=data.pcsUnits||[],bats=data.batteryGroups||[];const total=finite(station.totalPower)?station.totalPower/1000:null;const online=pcs.filter(p=>finite(p.P)).length;const batteryOnline=bats.filter(b=>b.status==='on').length;const source=data.meta&&data.meta.source||'unavailable';
+  text('totalPower',`${fmt(total,2)} MW`);text('corePower',`${fmt(Math.abs(total),2)} MW`);text('coreSoc',`SOC ${fmt(station.avgSoc,1)}%`);text('avgSoc',`${fmt(station.avgSoc,1)} %`);text('ringSoc',fmt(station.avgSoc,1));text('pcsOnline',`${online} / ${pcs.length||'--'}`);text('orbitPcs',`${online} / ${pcs.length||'--'}`);text('orbitBattery',`${bats.length} 组`);text('batteryOnline',`${batteryOnline} / ${bats.length||'--'}`);text('dailyEnergy',`${fmt(station.dailyEnergy,1)} kWh`);text('efficiency',`${fmt(station.efficiency,1)} %`);text('avgSoh',`${fmt(station.avgSoh,1)} %`);text('gridVoltage',`${fmt(data.grid35kV?.U,1)} kV`);
+  const charging=finite(total)&&total<0;const mode=finite(total)?(charging?'充电运行':'放电运行'):'能流待机';text('powerMode',mode);text('flowChip',mode);text('coreMode',charging?'CHARGING FLOW':'DISCHARGING FLOW');text('orbitMode',station.chargeMode||mode);el('socRing').style.setProperty('--soc',`${Math.max(0,Math.min(100,station.avgSoc||0))}%`);
+  const quality=data.meta?.quality||'BAD_COMM';text('qualityText',`数据质量 ${quality}`);const pill=el('sourcePill');pill.querySelector('span').textContent=source==='mock'?'模拟数据 · READ ONLY':source==='live'?'实时数据 · MODBUS TCP':'数据链路离线';pill.style.color=source==='mock'?'var(--purple)':source==='live'?'var(--green)':'var(--red)';text('lastUpdate',`LAST UPDATE ${new Date(data.timestamp||Date.now()).toLocaleTimeString('zh-CN',{hour12:false})}`);
+  renderAssets(data);renderFleet(data);renderAlarms(data);renderTrend(data);renderReport(data.report);renderEngineeringViews(data);selectAssetLayer(state.activeLayer);
+}
+
+const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+function setConfigStatus(message,tone=''){
+  const node=el('configStatus');node.textContent=message;node.style.color=tone==='pass'?'var(--green)':tone==='fail'?'var(--red)':'#8fb3c8';
+}
+async function readApiJson(response){
+  const raw=await response.text();
+  try{return JSON.parse(raw)}catch{
+    if(raw.trimStart().startsWith('<'))throw new Error('当前页面未连接EMS参数API，可能打开了旧版本或普通静态页面。请关闭此标签页，从最新ems_win目录双击EMS一键启动.exe。');
+    throw new Error('EMS参数API返回了无法识别的数据，请查看页面服务日志。');
+  }
+}
+function typeOptions(selected){return [['PCS','PCS'],['BMS','BMS'],['COMBINED','PCS+BMS共用']].map(([value,label])=>`<option value="${value}" ${value===selected?'selected':''}>${label}</option>`).join('')}
+function parityOptions(selected){return [['none','无校验'],['even','偶校验'],['odd','奇校验']].map(([value,label])=>`<option value="${value}" ${value===selected?'selected':''}>${label}</option>`).join('')}
+function deviceSettingCard(device,index){
+  const gateway=device.gateway||{enabled:false,baudRate:9600,dataBits:8,parity:'none',stopBits:1};
+  const field=(label,name,value,type='text',extra='')=>`<div class="settings-field"><label>${label}</label><input data-field="${name}" type="${type}" value="${escapeHtml(value)}" ${extra}></div>`;
+  return `<article class="device-setting-card" data-device-index="${index}">
+    <div class="device-setting-head"><label class="device-setting-title"><input data-field="enabled" type="checkbox" ${device.enabled?'checked':''}><span>${escapeHtml(device.id||'NEW DEVICE')}</span><small style="color:var(--muted)">${escapeHtml(device.type||'')}</small></label><div class="device-setting-actions"><button class="settings-button" data-action="test">FC03只读测试</button><button class="settings-button" data-action="copy">复制</button><button class="settings-button danger" data-action="delete">删除</button></div></div>
+    <div class="device-fields">
+      ${field('设备ID','id',device.id||'')}${field('设备名称','name',device.name||'')}
+      <div class="settings-field"><label>设备类型</label><select data-field="type">${typeOptions(device.type)}</select></div>
+      ${field('IP地址 / 主机名','host',device.host||'')}${field('TCP端口','port',device.port??502,'number','min="1" max="65535"')}${field('Unit ID','unitId',device.unitId??1,'number','min="0" max="255"')}
+      ${field('响应超时 ms','timeoutMs',device.timeoutMs??1000,'number','min="100" max="60000"')}${field('轮询周期 ms','pollingIntervalMs',device.pollingIntervalMs??1000,'number','min="100" max="60000"')}${field('重连间隔 ms','reconnectIntervalMs',device.reconnectIntervalMs??10000,'number','min="500" max="300000"')}${field('FC03最大长度','maxRegistersPerRequest',device.maxRegistersPerRequest??125,'number','min="1" max="125"')}<div class="gateway-toggle"><div class="settings-field"><label>TCP转RTU网关</label><label style="display:flex;gap:7px;align-items:center;color:#dcecff"><input data-field="gatewayEnabled" type="checkbox" ${gateway.enabled?'checked':''}>记录串口参数</label></div></div>
+    </div>
+    <div class="gateway-fields" ${gateway.enabled?'':'hidden'}>${field('波特率只用于网关串口侧','baudRate',gateway.baudRate,'number','min="300" max="921600"')}${field('数据位','dataBits',gateway.dataBits,'number','min="7" max="8"')}<div class="settings-field"><label>校验位</label><select data-field="parity">${parityOptions(gateway.parity)}</select></div>${field('停止位','stopBits',gateway.stopBits,'number','min="1" max="2"')}</div>
+    <div class="test-result" data-test-result>未执行连接测试</div>
+  </article>`;
+}
+function renderCommunicationSettings(){
+  const config=state.config;if(!config)return;
+  el('defaultTimeout').value=config.defaults?.timeoutMs??1000;el('defaultPolling').value=config.defaults?.pollingIntervalMs??1000;el('defaultReconnect').value=config.defaults?.reconnectIntervalMs??10000;el('defaultMaxRegisters').value=config.defaults?.maxRegistersPerRequest??125;el('settingsWsPort').value=config.websocket?.port??8082;
+  el('commDeviceRows').innerHTML=config.devices?.length?config.devices.map(deviceSettingCard).join(''):'<div class="settings-empty">暂无设备。点击“+ PCS”或“+ BMS”建立待调试设备。</div>';
+}
+function numberField(card,name){return Number(card.querySelector(`[data-field="${name}"]`).value)}
+function deviceFromCard(card,previous={}){
+  return {...previous,id:card.querySelector('[data-field="id"]').value.trim().toUpperCase(),name:card.querySelector('[data-field="name"]').value.trim(),type:card.querySelector('[data-field="type"]').value,enabled:card.querySelector('[data-field="enabled"]').checked,host:card.querySelector('[data-field="host"]').value.trim(),port:numberField(card,'port'),unitId:numberField(card,'unitId'),timeoutMs:numberField(card,'timeoutMs'),pollingIntervalMs:numberField(card,'pollingIntervalMs'),reconnectIntervalMs:numberField(card,'reconnectIntervalMs'),maxRegistersPerRequest:numberField(card,'maxRegistersPerRequest'),gateway:{enabled:card.querySelector('[data-field="gatewayEnabled"]').checked,baudRate:numberField(card,'baudRate'),dataBits:numberField(card,'dataBits'),parity:card.querySelector('[data-field="parity"]').value,stopBits:numberField(card,'stopBits')}};
+}
+function syncCommunicationForm(){
+  if(!state.config)return;
+  state.config.devices=[...el('commDeviceRows').querySelectorAll('[data-device-index]')].map((card,index)=>deviceFromCard(card,state.config.devices[index]));
+  state.config.defaults={...state.config.defaults,timeoutMs:Number(el('defaultTimeout').value),pollingIntervalMs:Number(el('defaultPolling').value),reconnectIntervalMs:Number(el('defaultReconnect').value),maxRegistersPerRequest:Number(el('defaultMaxRegisters').value)};
+  state.config.websocket={...state.config.websocket,port:Number(el('settingsWsPort').value)};
+}
+async function loadCommunicationConfig(){
+  setConfigStatus('正在读取 vrfb_modbus_config.json …');
+  try{const runtimeResponse=await fetch("/api/runtime",{cache:'no-store'});const runtime=await readApiJson(runtimeResponse);if(!runtimeResponse.ok||runtime.service!=='VRFB_EMS_SETTINGS_API')throw new Error('当前页面未连接EMS参数API，请从最新ems_win目录重新启动。');const response=await fetch("/api/config",{cache:'no-store'});const payload=await readApiJson(response);if(!response.ok||!payload.ok)throw new Error(payload.error||'配置读取失败');state.config=payload.config;state.settingsLoaded=true;renderCommunicationSettings();updateChannelButtons(state.currentWsUrl||'ws://127.0.0.1:8082');setConfigStatus(`已读取 ${state.config.devices.length} 台设备 · EMS版本 ${runtime.buildVersion}；写控制保持禁用。`,'pass')}catch(error){setConfigStatus(`读取失败：${error.message}\n请通过最新版本的 EMS一键启动.exe 打开界面。`,'fail')}
+}
+async function saveCommunicationConfig(){
+  syncCommunicationForm();setConfigStatus('正在校验并保存参数…');
+  try{const response=await fetch("/api/config",{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(state.config)});const payload=await readApiJson(response);if(!response.ok||!payload.ok)throw new Error((payload.errors||[payload.error]).join('；'));state.config=payload.config;renderCommunicationSettings();updateChannelButtons(state.currentWsUrl||'ws://127.0.0.1:8082');setConfigStatus('保存成功，旧配置已备份为 vrfb_modbus_config.json.bak。请重新启动“真实Modbus通讯”使采集器加载新参数。','pass')}catch(error){setConfigStatus(`保存失败：${error.message}`,'fail')}
+}
+async function testModbusDevice(index){
+  syncCommunicationForm();const device=state.config.devices[index];const card=el('commDeviceRows').querySelector(`[data-device-index="${index}"]`);const resultNode=card.querySelector('[data-test-result]');resultNode.className='test-result';resultNode.textContent=`正在测试 ${device.host||'未填写IP'}:${device.port} / Unit ${device.unitId} …`;
+  try{const response=await fetch("/api/modbus/test",{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({device,address:1,count:1})});const payload=await readApiJson(response);if(!response.ok||!payload.ok)throw new Error(payload.error||'测试失败');resultNode.className='test-result pass';resultNode.textContent=`PASS · ${payload.result.operation} · ${payload.result.target} · Unit ${payload.result.unitId} · ${payload.result.latencyMs} ms · 原始值 ${payload.result.values.join(', ')}`}catch(error){const refused=/ECONNREFUSED|connection refused|连接被拒绝/i.test(error.message);const detail=refused?'设备可能只允许一个 Modbus TCP 客户端；请先停止真实通讯桥接后再做 FC03 独立测试。':error.message;resultNode.className='test-result fail';resultNode.textContent=`FAIL · ${detail}`}
+}
+function nextDeviceId(type){const prefix=type==='BMS'?'BMS':'PCS';const used=new Set((state.config.devices||[]).map(device=>device.id));let number=1;while(used.has(`${prefix}${String(number).padStart(3,'0')}`))number++;return `${prefix}${String(number).padStart(3,'0')}`}
+function addCommunicationDevice(type){
+  syncCommunicationForm();const id=nextDeviceId(type);const defaults=state.config.defaults||{};state.config.devices.push({id,name:id,type,enabled:false,host:'',port:502,unitId:1,timeoutMs:defaults.timeoutMs||1000,pollingIntervalMs:defaults.pollingIntervalMs||1000,reconnectIntervalMs:defaults.reconnectIntervalMs||10000,maxRegistersPerRequest:defaults.maxRegistersPerRequest||125,gateway:{enabled:false,baudRate:9600,dataBits:8,parity:'none',stopBits:1}});renderCommunicationSettings();setConfigStatus(`${id} 已加入，填写地址后勾选启用并保存。`)
+}
+function exportCommunicationConfig(){syncCommunicationForm();const blob=new Blob([JSON.stringify(state.config,null,2)],{type:'application/json'});const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='vrfb_modbus_config.json';link.click();URL.revokeObjectURL(link.href);setConfigStatus('配置已导出；导出文件不包含控制令牌。','pass')}
+async function importCommunicationConfig(file){
+  try{const candidate=JSON.parse(await file.text());if(!Array.isArray(candidate.devices))throw new Error('只接受包含 devices 数组的V3配置');state.config=candidate;renderCommunicationSettings();setConfigStatus('配置已导入到编辑区，尚未保存。请检查后点击“保存参数”。')}catch(error){setConfigStatus(`导入失败：${error.message}`,'fail')}
+}
+el('commDeviceRows').addEventListener('change',event=>{if(event.target.dataset.field==='gatewayEnabled'){const card=event.target.closest('[data-device-index]');card.querySelector('.gateway-fields').hidden=!event.target.checked}});
+el('commDeviceRows').addEventListener('click',event=>{const action=event.target.dataset.action;if(!action)return;const card=event.target.closest('[data-device-index]');const index=Number(card.dataset.deviceIndex);if(action==='test')testModbusDevice(index);if(action==='copy'){syncCommunicationForm();const copy=JSON.parse(JSON.stringify(state.config.devices[index]));copy.id=nextDeviceId(copy.type);copy.name=`${copy.name} 副本`;copy.enabled=false;state.config.devices.splice(index+1,0,copy);renderCommunicationSettings()}if(action==='delete'&&confirm(`删除设备 ${state.config.devices[index].id}？保存前可通过“重新读取”撤销。`)){syncCommunicationForm();state.config.devices.splice(index,1);renderCommunicationSettings()}});
+el('configReload').addEventListener('click',loadCommunicationConfig);el('configSave').addEventListener('click',saveCommunicationConfig);el('configAddPcs').addEventListener('click',()=>addCommunicationDevice('PCS'));el('configAddBms').addEventListener('click',()=>addCommunicationDevice('BMS'));el('configExport').addEventListener('click',exportCommunicationConfig);el('configImport').addEventListener('change',event=>{const file=event.target.files[0];if(file)importCommunicationConfig(file);event.target.value=''});
+el('reportCsvExport').addEventListener('click',exportDailyReport);
+
+function configuredTargetSummary(){
+  const devices=(state.config?.devices||[]).filter(device=>device.enabled);if(!devices.length)return '未配置启用设备';const shown=devices.slice(0,3).map(device=>`${device.id} ${device.host}:${device.port}`).join('，');return devices.length>3?`${shown} 等${devices.length}台`:shown;
+}
+function updateChannelButtons(url,expectedSource=state.expectedSource||channelGuard.inferChannelSource(url)){
+  el('bmsLiveChannel').classList.toggle('active',expectedSource==='live');el('bmsMockChannel').classList.toggle('active',expectedSource==='mock');const detail=expectedSource==='live'?`；轮询 ${configuredTargetSummary()}`:'';text('bmsChannelTarget',`${expectedSource==='live'?'真实':'模拟'} · ${url}${detail}`);
+}
+function clearChannelData(message){
+  render({station:{},pcsUnits:[],batteryGroups:[],alarms:[],powerHistory:[],socHistory:[],meta:{source:'unavailable',quality:'BAD_COMM'},timestamp:new Date().toISOString()});state.data=null;el('sourcePill').querySelector('span').textContent=message;el('sourcePill').style.color='var(--red)';text('lastUpdate','LAST UPDATE --:--:--');
+}
+function switchDataChannel(url,expectedSource){
+  clearTimeout(state.reconnect);if(state.ws){state.ws.onclose=null;state.ws.onerror=null;state.ws.close()}
+  state.expectedSource=expectedSource;state.mockWsUrl=channelGuard.rememberMockUrl(url,expectedSource,state.mockWsUrl);const params=new URLSearchParams(window.location.search);params.set('ws',url);params.set('source',expectedSource);history.replaceState(null,'',`${window.location.pathname}?${params.toString()}`);clearChannelData(`已切换${expectedSource==='live'?'真实':'模拟'}通道 · 等待有效首帧`);updateChannelButtons(url,expectedSource);connect();
+}
+el('bmsLiveChannel').addEventListener('click',()=>switchDataChannel('ws://127.0.0.1:8082','live'));
+el('bmsMockChannel').addEventListener('click',()=>switchDataChannel(state.mockWsUrl,'mock'));
+
+function connect(){
+  clearTimeout(state.reconnect);const params=new URLSearchParams(window.location.search);const protocol=window.location.protocol==='https:'?'wss:':'ws:';const host=window.location.hostname==='localhost'?'127.0.0.1':window.location.hostname||'127.0.0.1';const url=params.get('ws')||`${protocol}//${host}:8082`;
+  const expectedSource=channelGuard.inferChannelSource(url,params.get('source'));state.expectedSource=expectedSource;state.currentWsUrl=url;state.mockWsUrl=channelGuard.rememberMockUrl(url,expectedSource,state.mockWsUrl);updateChannelButtons(url,expectedSource);clearChannelData(`${expectedSource==='live'?'真实':'模拟'}通道连接中 · 等待有效首帧`);
+  const socket=new WebSocket(url);state.ws=socket;socket.onopen=()=>{if(socket===state.ws)el('sourcePill').querySelector('span').textContent=`${expectedSource==='live'?'真实':'模拟'}链路已连接 · 校验首帧`};socket.onmessage=event=>{if(socket!==state.ws)return;try{const message=JSON.parse(event.data);if(message.type!=='scada_update'||!message.data?.meta?.source)return;const actualSource=message.data.meta.source;if(!channelGuard.acceptsFrameSource(expectedSource,actualSource)){socket.onclose=null;socket.onerror=null;socket.close();clearChannelData(`通道类型不匹配：选择${expectedSource}，收到${actualSource}`);return}render(message.data)}catch(error){console.error('[EMS] invalid message',error)}};socket.onclose=()=>{if(socket!==state.ws)return;clearChannelData(`${expectedSource==='live'?'真实':'模拟'}链路离线 · 5秒后重连`);state.reconnect=setTimeout(connect,5000)};socket.onerror=()=>socket.close();
+}
+window.addEventListener('resize',()=>state.chart&&state.chart.resize());loadCommunicationConfig();connect();
+</script>
+</body>
+</html>
