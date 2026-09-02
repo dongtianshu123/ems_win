@@ -73,6 +73,27 @@
         "stopBits": 1
       },
       "note": ""
+    },
+    {
+      "id": "BMS004",
+      "name": "BMS004",
+      "type": "BMS",
+      "enabled": true,
+      "host": "192.168.0.6",
+      "port": 502,
+      "unitId": 1,
+      "timeoutMs": 1000,
+      "pollingIntervalMs": 1000,
+      "reconnectIntervalMs": 10000,
+      "maxRegistersPerRequest": 125,
+      "gateway": {
+        "enabled": false,
+        "baudRate": 9600,
+        "dataBits": 8,
+        "parity": "none",
+        "stopBits": 1
+      },
+      "note": ""
     }
   ],
   "websocket": {
