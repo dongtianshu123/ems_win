@@ -46,6 +46,16 @@ class Historian {
         operator TEXT,
         payload_json TEXT NOT NULL
       );
+      CREATE TABLE IF NOT EXISTS daily_reports (
+        id INTEGER PRIMARY KEY,
+        report_date TEXT NOT NULL,
+        version INTEGER NOT NULL,
+        generated_at TEXT NOT NULL,
+        source TEXT NOT NULL,
+        review_status TEXT NOT NULL,
+        report_json TEXT NOT NULL,
+        UNIQUE(report_date, version)
+      );
     `);
     this.insertTelemetry = this.database.prepare(`
       INSERT INTO telemetry
@@ -120,6 +130,36 @@ class Historian {
       GROUP BY substr(sampled_at, 1, 16)
       ORDER BY minute
     `).all(...parameters).map((row) => ({ ...row }));
+  }
+
+  saveDailyReport(report, { source = "HISTORIAN", reviewStatus = "DRAFT" } = {}) {
+    if (!report?.date) throw new Error("daily_report_date_required");
+    const latest = this.database.prepare("SELECT max(version) AS version FROM daily_reports WHERE report_date = ?").get(report.date);
+    const version = Number(latest.version || 0) + 1;
+    const generatedAt = new Date().toISOString();
+    this.database.prepare(`
+      INSERT INTO daily_reports (report_date, version, generated_at, source, review_status, report_json)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run(report.date, version, generatedAt, source, reviewStatus, JSON.stringify(report));
+    return { date: report.date, version, generatedAt, source, reviewStatus, report };
+  }
+
+  getDailyReport(date, version) {
+    const row = version === undefined
+      ? this.database.prepare("SELECT * FROM daily_reports WHERE report_date = ? ORDER BY version DESC LIMIT 1").get(date)
+      : this.database.prepare("SELECT * FROM daily_reports WHERE report_date = ? AND version = ?").get(date, version);
+    if (!row) return null;
+    return {
+      date: row.report_date, version: row.version, generatedAt: row.generated_at,
+      source: row.source, reviewStatus: row.review_status, report: JSON.parse(row.report_json),
+    };
+  }
+
+  listDailyReports() {
+    return this.database.prepare(`
+      SELECT report_date AS date, max(version) AS latestVersion, max(generated_at) AS generatedAt
+      FROM daily_reports GROUP BY report_date ORDER BY report_date DESC
+    `).all().map((row) => ({ ...row }));
   }
 
   listTables() {

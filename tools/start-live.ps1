@@ -54,6 +54,7 @@ foreach ($target in $targets) {
 }
 
 $env:EMS_DATA_MODE = "external"
+$env:EMS_REPORT_MODE = "live"
 $env:EMS_HTTP_PORT = [string]$pagePort
 $env:EMS_BUILD_VERSION = $buildVersion
 $pageProcess = Start-Process -FilePath $nodePath -ArgumentList $serverScript -WorkingDirectory $appRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $logRoot "page-service.out.log") -RedirectStandardError (Join-Path $logRoot "page-service.err.log") -PassThru

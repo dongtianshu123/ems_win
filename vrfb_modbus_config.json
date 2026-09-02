@@ -1,13 +1,108 @@
 {
   "schemaVersion": 3,
-  "runtime": { "mode": "live" },
+  "runtime": {
+    "mode": "live"
+  },
   "pointModel": "config/vrfb-point-model.json",
-  "defaults": { "timeoutMs": 1000, "reconnectIntervalMs": 10000, "pollingIntervalMs": 1000, "maxRegistersPerRequest": 125 },
+  "defaults": {
+    "timeoutMs": 1000,
+    "reconnectIntervalMs": 10000,
+    "pollingIntervalMs": 1000,
+    "maxRegistersPerRequest": 125
+  },
   "devices": [
-    { "id": "BMS001", "name": "BMS001", "type": "BMS", "enabled": true, "host": "192.168.0.3", "port": 502, "unitId": 1 },
-    { "id": "BMS002", "name": "BMS002", "type": "BMS", "enabled": true, "host": "192.168.0.4", "port": 502, "unitId": 1 },
-    { "id": "BMS003", "name": "BMS003", "type": "BMS", "enabled": true, "host": "192.168.0.5", "port": 502, "unitId": 1 }
+    {
+      "id": "BMS001",
+      "name": "BMS001",
+      "type": "BMS",
+      "enabled": true,
+      "host": "192.168.0.3",
+      "port": 502,
+      "unitId": 1,
+      "timeoutMs": 1000,
+      "pollingIntervalMs": 1000,
+      "reconnectIntervalMs": 10000,
+      "maxRegistersPerRequest": 125,
+      "gateway": {
+        "enabled": false,
+        "baudRate": 9600,
+        "dataBits": 8,
+        "parity": "none",
+        "stopBits": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "BMS002",
+      "name": "BMS002",
+      "type": "BMS",
+      "enabled": true,
+      "host": "192.168.0.4",
+      "port": 502,
+      "unitId": 1,
+      "timeoutMs": 1000,
+      "pollingIntervalMs": 1000,
+      "reconnectIntervalMs": 10000,
+      "maxRegistersPerRequest": 125,
+      "gateway": {
+        "enabled": false,
+        "baudRate": 9600,
+        "dataBits": 8,
+        "parity": "none",
+        "stopBits": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "BMS003",
+      "name": "BMS003",
+      "type": "BMS",
+      "enabled": true,
+      "host": "192.168.0.5",
+      "port": 502,
+      "unitId": 1,
+      "timeoutMs": 1000,
+      "pollingIntervalMs": 1000,
+      "reconnectIntervalMs": 10000,
+      "maxRegistersPerRequest": 125,
+      "gateway": {
+        "enabled": false,
+        "baudRate": 9600,
+        "dataBits": 8,
+        "parity": "none",
+        "stopBits": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "BMS004",
+      "name": "BMS004",
+      "type": "BMS",
+      "enabled": true,
+      "host": "192.168.0.6",
+      "port": 502,
+      "unitId": 1,
+      "timeoutMs": 1000,
+      "pollingIntervalMs": 1000,
+      "reconnectIntervalMs": 10000,
+      "maxRegistersPerRequest": 125,
+      "gateway": {
+        "enabled": false,
+        "baudRate": 9600,
+        "dataBits": 8,
+        "parity": "none",
+        "stopBits": 1
+      },
+      "note": ""
+    }
   ],
-  "websocket": { "host": "0.0.0.0", "port": 8082 },
-  "control": { "enabled": false, "tokenEnv": "EMS_CONTROL_TOKEN", "auditFile": "logs/control-audit.ndjson" }
+  "websocket": {
+    "host": "0.0.0.0",
+    "port": 8082
+  },
+  "control": {
+    "enabled": false,
+    "tokenEnv": "EMS_CONTROL_TOKEN",
+    "auditFile": "logs/control-audit.ndjson"
+  }
 }

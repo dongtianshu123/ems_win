@@ -2,6 +2,9 @@ const fs = require("node:fs");
 const http = require("node:http");
 const path = require("node:path");
 const ModbusRTU = require("modbus-serial");
+const { Historian } = require("../src/historian");
+const { createReportApi } = require("../src/report-api");
+const { buildHistoricalDailyReport } = require("../src/report-history");
 const { createSettingsApi } = require("../src/settings-api");
 
 const root = path.join(__dirname, "..");
@@ -17,6 +20,16 @@ const settingsApi = createSettingsApi({
   configPath: path.join(root, "vrfb_modbus_config.json"),
   ModbusClient: ModbusRTU,
 });
+const historian = new Historian(process.env.EMS_HISTORY_DB || path.join(root, "data", "ems-history.sqlite"));
+const reportApi = createReportApi({
+  historian,
+  mode: process.env.EMS_REPORT_MODE || (process.env.EMS_DATA_MODE === "external" ? "live" : "simulation"),
+  buildLiveReport: (date) => buildHistoricalDailyReport({
+    historian,
+    date,
+    config: JSON.parse(fs.readFileSync(path.join(root, "config", "report-config.json"), "utf8")),
+  }),
+});
 
 function resolveRequestPath(requestUrl) {
   const pathname = decodeURIComponent(new URL(requestUrl, "http://127.0.0.1").pathname);
@@ -26,6 +39,7 @@ function resolveRequestPath(requestUrl) {
 }
 
 const server = http.createServer(async (request, response) => {
+  if (await reportApi(request, response)) return;
   if (await settingsApi(request, response)) return;
   const filePath = resolveRequestPath(request.url);
   if (!filePath) {
@@ -44,6 +58,13 @@ const server = http.createServer(async (request, response) => {
     response.end(data);
   });
 });
+
+function shutdown() {
+  server.close(() => { historian.close(); process.exit(0); });
+}
+
+process.once("SIGINT", shutdown);
+process.once("SIGTERM", shutdown);
 
 server.listen(httpPort, "127.0.0.1", () => {
   console.log(`[portable] EMS page on http://127.0.0.1:${httpPort}`);

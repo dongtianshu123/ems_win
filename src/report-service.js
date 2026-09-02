@@ -67,7 +67,8 @@ function settlementSummary(readings, tariffs, expectedSamples) {
     dischargeRevenue += priced.dischargeRevenue;
   }
 
-  const settleable = validIntervals > 0 && pricingComplete;
+  const samplesComplete = !Number.isFinite(expectedSamples) || expectedSamples <= 0 || goodSamples >= expectedSamples;
+  const settleable = validIntervals > 0 && pricingComplete && samplesComplete;
   return {
     basis: "PCC_SETTLEMENT_METER",
     status: settleable ? "SETTLEABLE" : "NOT_SETTLEABLE",

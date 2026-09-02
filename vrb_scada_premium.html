@@ -206,12 +206,13 @@ button{font:inherit}.command-center{min-height:100vh;padding:18px;display:flex;f
       </section>
 
       <section class="asset-view engineering-view glass" data-view="reports" hidden>
-        <div class="engineering-head"><div><h2>运行与收益报表</h2><p>日电量、往返效率、缺测率与峰谷收益双口径核算</p></div><button class="settings-button" id="reportCsvExport" disabled>导出 CSV</button></div>
+        <div class="engineering-head"><div><h2>运行与收益报表</h2><p>日电量、往返效率、缺测率与峰谷收益双口径核算</p></div><div class="settings-toolbar"><input id="reportDate" type="date"><button class="settings-button" id="reportLoad">读取日报</button><button class="settings-button" id="reportRecalculate">重算并保存</button><button class="settings-button" id="reportCsvExport" disabled>导出 CSV</button></div></div>
         <div class="report-grid">
           <article class="report-basis"><h3>PCC结算表计</h3><p>业主财务结算唯一口径；必须具备完整进/出电量、数据质量和分时电价。</p><span class="report-status" id="settlementStatus">不可结算</span><div class="report-metrics"><div class="report-metric"><span>充电量</span><b id="settlementCharge">-- kWh</b></div><div class="report-metric"><span>放电量</span><b id="settlementDischarge">-- kWh</b></div><div class="report-metric"><span>往返效率</span><b id="settlementEfficiency">-- %</b></div><div class="report-metric"><span>净收益</span><b id="settlementRevenue">-- 元</b></div></div></article>
           <article class="report-basis"><h3>PCS运行分析</h3><p>汇总各PCS充放电量，用于设备效率和偏差分析，不替代关口结算。</p><span class="report-status" id="operationalStatus">仅供分析</span><div class="report-metrics"><div class="report-metric"><span>充电量</span><b id="operationalCharge">-- kWh</b></div><div class="report-metric"><span>放电量</span><b id="operationalDischarge">-- kWh</b></div><div class="report-metric"><span>往返效率</span><b id="operationalEfficiency">-- %</b></div><div class="report-metric"><span>缺测率</span><b id="operationalMissing">-- %</b></div></div></article>
         </div>
         <div class="report-caveat" id="reportCaveat">当前工程尚未配置PCC结算表计，因此财务结果明确标记为“不可结算”；PCS合计不得作为收益结算依据。历史数据接口就绪后，本页接收日报数据并开放CSV导出。</div>
+        <div class="engineering-note" id="reportHistoryStatus">日报历史：尚未读取</div>
       </section>
 
       <section class="asset-view engineering-view settings-view glass" data-view="settings" hidden>
@@ -248,7 +249,7 @@ button{font:inherit}.command-center{min-height:100vh;padding:18px;display:flex;f
   <footer class="footer-strip"><span><b>VRFB EMS PREMIUM</b><em id="lastUpdate">LAST UPDATE --</em></span><span class="legend"><i style="background:var(--green)"></i>正常 <i style="background:var(--amber)"></i>告警 <i style="background:var(--red)"></i>故障 <i style="background:var(--cyan)"></i>能流</span></footer>
 </div>
 <script>
-const state={data:null,selectedPcsId:null,selectedBmsId:null,activeLayer:'overview',chart:null,ws:null,reconnect:null,config:null,settingsLoaded:false,report:null,expectedSource:null,currentWsUrl:null,mockWsUrl:'ws://127.0.0.1:8080'};
+const state={data:null,selectedPcsId:null,selectedBmsId:null,activeLayer:'overview',chart:null,ws:null,reconnect:null,config:null,settingsLoaded:false,report:null,reportSnapshot:null,expectedSource:null,currentWsUrl:null,mockWsUrl:'ws://127.0.0.1:8080'};
 const channelGuard=window.EmsChannelGuard;
 const el=id=>document.getElementById(id);
 const finite=value=>Number.isFinite(value);
@@ -410,12 +411,21 @@ function exportDailyReport(){
   if(!state.report)return;const columns=['date','basis','status','chargeKWh','dischargeKWh','roundTripEfficiencyPct','missingRatePct','chargeCost','dischargeRevenue','netRevenue','note'];const cell=value=>{const raw=value??'';const valueText=String(raw);return /[",\r\n]/.test(valueText)?`"${valueText.replaceAll('"','""')}"`:valueText};const rows=[state.report.settlement,state.report.operational].map(row=>columns.map(column=>cell(column==='date'?state.report.date:row?.[column])).join(','));const blob=new Blob(['\uFEFF'+columns.join(',')+'\r\n'+rows.join('\r\n')+'\r\n'],{type:'text/csv;charset=utf-8'});const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=`EMS日报-${state.report.date}.csv`;link.click();URL.revokeObjectURL(link.href);
 }
 
+async function requestDailyReport(recalculate=false){
+  const date=el('reportDate').value;if(!date){text('reportHistoryStatus','请先选择日报日期');return}
+  text('reportHistoryStatus',recalculate?'正在重算并保存日报…':'正在读取日报…');
+  try{
+    const response=await fetch(recalculate?'/api/reports/daily/recalculate':`/api/reports/daily?date=${encodeURIComponent(date)}`,recalculate?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date})}:{});const payload=await response.json();if(!response.ok)throw new Error(payload.error||`HTTP ${response.status}`);
+    state.reportSnapshot=payload.snapshot;renderReport(payload.snapshot.report);text('reportHistoryStatus',`日报 ${payload.snapshot.date} · 版本V${payload.snapshot.version} · ${payload.snapshot.source} · ${payload.snapshot.reviewStatus}`);
+  }catch(error){text('reportHistoryStatus',`日报操作失败：${error.message}`)}
+}
+
 function render(data){
   state.data=data;const station=data.station||{},pcs=data.pcsUnits||[],bats=data.batteryGroups||[];const total=finite(station.totalPower)?station.totalPower/1000:null;const online=pcs.filter(p=>finite(p.P)).length;const batteryOnline=bats.filter(b=>b.status==='on').length;const source=data.meta&&data.meta.source||'unavailable';
   text('totalPower',`${fmt(total,2)} MW`);text('corePower',`${fmt(Math.abs(total),2)} MW`);text('coreSoc',`SOC ${fmt(station.avgSoc,1)}%`);text('avgSoc',`${fmt(station.avgSoc,1)} %`);text('ringSoc',fmt(station.avgSoc,1));text('pcsOnline',`${online} / ${pcs.length||'--'}`);text('orbitPcs',`${online} / ${pcs.length||'--'}`);text('orbitBattery',`${bats.length} 组`);text('batteryOnline',`${batteryOnline} / ${bats.length||'--'}`);text('dailyEnergy',`${fmt(station.dailyEnergy,1)} kWh`);text('efficiency',`${fmt(station.efficiency,1)} %`);text('avgSoh',`${fmt(station.avgSoh,1)} %`);text('gridVoltage',`${fmt(data.grid35kV?.U,1)} kV`);
   const charging=finite(total)&&total<0;const mode=finite(total)?(charging?'充电运行':'放电运行'):'能流待机';text('powerMode',mode);text('flowChip',mode);text('coreMode',charging?'CHARGING FLOW':'DISCHARGING FLOW');text('orbitMode',station.chargeMode||mode);el('socRing').style.setProperty('--soc',`${Math.max(0,Math.min(100,station.avgSoc||0))}%`);
   const quality=data.meta?.quality||'BAD_COMM';text('qualityText',`数据质量 ${quality}`);const pill=el('sourcePill');pill.querySelector('span').textContent=source==='mock'?'模拟数据 · READ ONLY':source==='live'?'实时数据 · MODBUS TCP':'数据链路离线';pill.style.color=source==='mock'?'var(--purple)':source==='live'?'var(--green)':'var(--red)';text('lastUpdate',`LAST UPDATE ${new Date(data.timestamp||Date.now()).toLocaleTimeString('zh-CN',{hour12:false})}`);
-  renderAssets(data);renderFleet(data);renderAlarms(data);renderTrend(data);renderReport(data.report);renderEngineeringViews(data);selectAssetLayer(state.activeLayer);
+  renderAssets(data);renderFleet(data);renderAlarms(data);renderTrend(data);renderReport(state.reportSnapshot?.report||data.report);renderEngineeringViews(data);selectAssetLayer(state.activeLayer);
 }
 
 const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -485,6 +495,7 @@ el('commDeviceRows').addEventListener('change',event=>{if(event.target.dataset.f
 el('commDeviceRows').addEventListener('click',event=>{const action=event.target.dataset.action;if(!action)return;const card=event.target.closest('[data-device-index]');const index=Number(card.dataset.deviceIndex);if(action==='test')testModbusDevice(index);if(action==='copy'){syncCommunicationForm();const copy=JSON.parse(JSON.stringify(state.config.devices[index]));copy.id=nextDeviceId(copy.type);copy.name=`${copy.name} 副本`;copy.enabled=false;state.config.devices.splice(index+1,0,copy);renderCommunicationSettings()}if(action==='delete'&&confirm(`删除设备 ${state.config.devices[index].id}？保存前可通过“重新读取”撤销。`)){syncCommunicationForm();state.config.devices.splice(index,1);renderCommunicationSettings()}});
 el('configReload').addEventListener('click',loadCommunicationConfig);el('configSave').addEventListener('click',saveCommunicationConfig);el('configAddPcs').addEventListener('click',()=>addCommunicationDevice('PCS'));el('configAddBms').addEventListener('click',()=>addCommunicationDevice('BMS'));el('configExport').addEventListener('click',exportCommunicationConfig);el('configImport').addEventListener('change',event=>{const file=event.target.files[0];if(file)importCommunicationConfig(file);event.target.value=''});
 el('reportCsvExport').addEventListener('click',exportDailyReport);
+el('reportLoad').addEventListener('click',()=>requestDailyReport(false));el('reportRecalculate').addEventListener('click',()=>requestDailyReport(true));el('reportDate').value=new Date().toISOString().slice(0,10);el('reportDate').addEventListener('change',()=>{state.reportSnapshot=null});
 
 function configuredTargetSummary(){
   const devices=(state.config?.devices||[]).filter(device=>device.enabled);if(!devices.length)return '未配置启用设备';const shown=devices.slice(0,3).map(device=>`${device.id} ${device.host}:${device.port}`).join('，');return devices.length>3?`${shown} 等${devices.length}台`:shown;
