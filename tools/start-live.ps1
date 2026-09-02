@@ -1,53 +1,58 @@
-$ErrorActionPreference = "Stop"
+param([switch]$NoBrowser)
 
+$ErrorActionPreference = "Stop"
 $appRoot = Split-Path -Parent $PSScriptRoot
 $nodePath = Join-Path $appRoot "runtime\node.exe"
 $serverScript = Join-Path $appRoot "tools\portable-server.js"
 $bridgeScript = Join-Path $appRoot "modbus-bridge.js"
 $sourceCheckScript = Join-Path $appRoot "tools\check-websocket-source.js"
+$configPath = Join-Path $appRoot "vrfb_modbus_config.json"
 $logRoot = Join-Path $appRoot "logs"
+$launcherLog = Join-Path $logRoot "live-launcher.log"
+$runtimeFile = Join-Path $logRoot "live-runtime.json"
 $buildVersion = (Split-Path -Leaf $appRoot) -replace '^ems_win_', ''
+
+New-Item -ItemType Directory -Path $logRoot -Force | Out-Null
+function Write-LaunchLog([string]$Message) {
+    $line = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') $Message"
+    Add-Content -LiteralPath $launcherLog -Value $line -Encoding ASCII
+    Write-Host $line
+}
 
 function Test-PortAvailable([int]$Port) {
     $listener = [Net.Sockets.TcpListener]::new([Net.IPAddress]::Loopback, $Port)
-    try {
-        $listener.Start()
-        return $true
-    }
-    catch {
-        return $false
-    }
-    finally {
-        $listener.Stop()
-    }
+    try { $listener.Start(); return $true }
+    catch { return $false }
+    finally { $listener.Stop() }
 }
 
 function Wait-TcpPort([int]$Port, [int]$TimeoutSeconds) {
     $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
     while ([DateTime]::UtcNow -lt $deadline) {
         $client = [Net.Sockets.TcpClient]::new()
-        try {
-            if ($client.ConnectAsync("127.0.0.1", $Port).Wait(300)) { return }
-        }
+        try { if ($client.ConnectAsync("127.0.0.1", $Port).Wait(300)) { return } }
         catch {}
         finally { $client.Dispose() }
         Start-Sleep -Milliseconds 200
     }
-    throw "端口 $Port 未能在 $TimeoutSeconds 秒内启动。"
+    throw "Port $Port did not start within $TimeoutSeconds seconds."
 }
 
-if (-not (Test-Path -LiteralPath $nodePath) -or -not (Test-Path -LiteralPath $serverScript) -or -not (Test-Path -LiteralPath $bridgeScript) -or -not (Test-Path -LiteralPath $sourceCheckScript)) {
-    throw "便携包不完整：缺少runtime、页面服务或Modbus桥接程序。请复制整个ems_win文件夹。"
+Write-LaunchLog "START build=$buildVersion"
+foreach ($required in @($nodePath, $serverScript, $bridgeScript, $sourceCheckScript, $configPath)) {
+    if (-not (Test-Path -LiteralPath $required)) { throw "Portable package is incomplete. Missing: $required" }
 }
-if (-not (Test-PortAvailable 8082)) {
-    throw "真实数据端口8082已被占用。为避免误用其他EMS版本，请先关闭旧版本真实通讯服务后重试。"
-}
+if (-not (Test-PortAvailable 8082)) { throw "Live data port 8082 is already in use. Stop the old live EMS service first." }
 
-# 8090..8099：始终选择空闲页面端口，不复用其他EMS版本的静态页面。
 $pagePort = 8090..8099 | Where-Object { Test-PortAvailable $_ } | Select-Object -First 1
-if ($null -eq $pagePort) { throw "页面端口8090～8099均被占用，无法启动本版本EMS。" }
+if ($null -eq $pagePort) { throw "All page ports 8090..8099 are in use." }
 
-New-Item -ItemType Directory -Path $logRoot -Force | Out-Null
+$config = Get-Content -LiteralPath $configPath -Raw | ConvertFrom-Json
+$targets = @($config.devices | Where-Object { $_.enabled })
+foreach ($target in $targets) {
+    Write-LaunchLog "TARGET id=$($target.id) type=$($target.type) endpoint=$($target.host):$($target.port) unit=$($target.unitId)"
+}
+
 $env:EMS_DATA_MODE = "external"
 $env:EMS_HTTP_PORT = [string]$pagePort
 $env:EMS_BUILD_VERSION = $buildVersion
@@ -60,13 +65,12 @@ while ([DateTime]::UtcNow -lt $deadline) {
     try {
         $runtime = Invoke-RestMethod -Uri $runtimeUrl -TimeoutSec 2
         if ($runtime.service -eq "VRFB_EMS_SETTINGS_API" -and $runtime.buildVersion -eq $buildVersion) { break }
-    }
-    catch {}
+    } catch {}
     Start-Sleep -Milliseconds 250
 }
 if ($null -eq $runtime -or $runtime.service -ne "VRFB_EMS_SETTINGS_API" -or $runtime.buildVersion -ne $buildVersion) {
     Stop-Process -Id $pageProcess.Id -Force -ErrorAction SilentlyContinue
-    throw "本版本参数设置API启动失败或版本不匹配，请查看logs\page-service.err.log。"
+    throw "The settings API failed to start or its build version does not match. See logs/page-service.err.log."
 }
 
 $env:EMS_APP_ROOT = $appRoot
@@ -77,9 +81,19 @@ Wait-TcpPort 8082 12
 if ($LASTEXITCODE -ne 0) {
     Stop-Process -Id $bridgeProcess.Id -Force -ErrorAction SilentlyContinue
     Stop-Process -Id $pageProcess.Id -Force -ErrorAction SilentlyContinue
-    throw "8082未提供真实live数据，启动已中止。请关闭旧模拟服务并查看modbus-bridge日志。"
+    throw "Port 8082 is not serving live data. See logs/modbus-bridge.err.log."
 }
 
+$runtimeInfo = [ordered]@{
+    buildVersion = $buildVersion
+    startedAt = (Get-Date).ToString("s")
+    pagePort = [int]$pagePort
+    dataPort = 8082
+    pagePid = $pageProcess.Id
+    bridgePid = $bridgeProcess.Id
+    targets = @($targets | ForEach-Object { [ordered]@{ id=$_.id; type=$_.type; host=$_.host; port=$_.port; unitId=$_.unitId } })
+}
+$runtimeInfo | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $runtimeFile -Encoding ASCII
+Write-LaunchLog "READY page=$pagePort data=8082 pagePid=$($pageProcess.Id) bridgePid=$($bridgeProcess.Id)"
 $previewUrl = "http://127.0.0.1:$pagePort/vrb_scada_premium.html?ws=ws://127.0.0.1:8082&source=live"
-"$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') build=$buildVersion page=$pagePort data=8082" | Set-Content -LiteralPath (Join-Path $logRoot "本次启动信息.txt") -Encoding UTF8
-Start-Process $previewUrl
+if (-not $NoBrowser) { Start-Process $previewUrl }

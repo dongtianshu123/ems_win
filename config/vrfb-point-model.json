@@ -14,7 +14,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA227_BMS用电电量高",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 2,
@@ -25,7 +26,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA227_BMS用电电量低",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 3,
@@ -36,7 +38,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA228_正极循环流量",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 4,
@@ -47,7 +50,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA229_BMS用电功率",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 5,
@@ -58,7 +62,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA230_负极循环流量",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 6,
@@ -69,7 +74,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA231_BMS充放电直流电流",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "A"
     },
     {
       "index": 7,
@@ -80,7 +86,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA232_BMS电堆直流电压",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "V"
     },
     {
       "index": 8,
@@ -91,7 +98,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA233_A分区电压1",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 9,
@@ -102,7 +110,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA234_A分区电压2",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 10,
@@ -113,7 +122,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA235_A分区电压3",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 11,
@@ -124,7 +134,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA236_A分区电压4",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 12,
@@ -135,7 +146,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA237_A分区电压5",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 13,
@@ -146,7 +158,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA238_A分区电压6",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 14,
@@ -157,7 +170,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA239_A分区电压7",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 15,
@@ -168,7 +182,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA240_A分区电压8",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 16,
@@ -179,7 +194,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA241_A分区电压9",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 17,
@@ -190,7 +206,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA242_A分区电压10",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 18,
@@ -201,7 +218,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA243_A分区电压11",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 19,
@@ -212,7 +230,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA244_A分区电压12",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 20,
@@ -223,7 +242,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA245_A分区电压13",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 21,
@@ -234,7 +254,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA246_A分区电压14",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 22,
@@ -245,7 +266,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA247_A分区电压15",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 23,
@@ -256,7 +278,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA248_A分区电压16",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 24,
@@ -267,7 +290,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA249_B分区电压1",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 25,
@@ -278,7 +302,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA250_B分区电压2",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 26,
@@ -289,7 +314,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA251_B分区电压3",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 27,
@@ -300,7 +326,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA252_B分区电压4",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 28,
@@ -311,7 +338,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA253_B分区电压5",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 29,
@@ -322,7 +350,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA254_B分区电压6",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 30,
@@ -333,7 +362,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA255_B分区电压7",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 31,
@@ -344,7 +374,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA256_B分区电压8",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 32,
@@ -355,7 +386,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA257_B分区电压9",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 33,
@@ -366,7 +398,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA258_B分区电压10",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 34,
@@ -377,7 +410,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA259_B分区电压11",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 35,
@@ -388,7 +422,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA260_B分区电压12",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 36,
@@ -399,7 +434,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA261_B分区电压13",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 37,
@@ -410,7 +446,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA262_B分区电压14",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 38,
@@ -421,7 +458,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA263_B分区电压15",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 39,
@@ -432,7 +470,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA264_B分区电压16",
-      "scale": 0.01
+      "scale": 0.01,
+      "unit": "V"
     },
     {
       "index": 40,
@@ -443,7 +482,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA265_SOC电压",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "V"
     },
     {
       "index": 41,
@@ -454,7 +494,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA266_SOC",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 42,
@@ -465,7 +506,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA267_正极管路压力1",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "kPa"
     },
     {
       "index": 43,
@@ -476,7 +518,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA268_正极管路压力2",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "kPa"
     },
     {
       "index": 44,
@@ -487,7 +530,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA269_负极管路压力1",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "kPa"
     },
     {
       "index": 45,
@@ -498,7 +542,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA270_负极管路压力2",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "kPa"
     },
     {
       "index": 46,
@@ -509,7 +554,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA271_正极罐压力1",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "kPa"
     },
     {
       "index": 47,
@@ -520,7 +566,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA272_负极罐压力1",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "kPa"
     },
     {
       "index": 48,
@@ -531,7 +578,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA273_电解液温度",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "℃"
     },
     {
       "index": 49,
@@ -542,7 +590,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA274_BMS柜温度",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "℃"
     },
     {
       "index": 50,
@@ -553,7 +602,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA275_最高单体电压",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "V"
     },
     {
       "index": 51,
@@ -564,7 +614,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA276_最低单体电压",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "V"
     },
     {
       "index": 52,
@@ -575,7 +626,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA277_BMS心跳字",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 53,
@@ -586,7 +638,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA278_充电限制电流",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "A"
     },
     {
       "index": 54,
@@ -597,7 +650,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA279_放电限制电流",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "A"
     },
     {
       "index": 55,
@@ -608,7 +662,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA280_充电限制电压",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "V"
     },
     {
       "index": 56,
@@ -619,7 +674,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA281_放电限制电压",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "V"
     },
     {
       "index": 57,
@@ -630,7 +686,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA282_正极储液罐液位",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 58,
@@ -641,7 +698,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA283_负极储液罐液位",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 59,
@@ -652,7 +710,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA284_泵阀状态字",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 60,
@@ -663,7 +722,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA285_故障字1",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 61,
@@ -674,7 +734,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA286_故障字2",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 62,
@@ -685,7 +746,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA287_故障字3",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 63,
@@ -696,7 +758,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA288_故障字4",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 64,
@@ -707,7 +770,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA289_备",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 65,
@@ -718,7 +782,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA290_事件信息",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 66,
@@ -729,7 +794,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA291_备",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 67,
@@ -740,7 +806,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA292_备",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 68,
@@ -751,7 +818,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA293_备",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 69,
@@ -762,7 +830,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA294_备",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 70,
@@ -773,7 +842,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA295_备",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 71,
@@ -784,7 +854,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA296_备",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 72,
@@ -795,7 +866,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA297_备",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 73,
@@ -806,7 +878,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA298_备",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 74,
@@ -817,7 +890,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "DATA299_备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 75,
@@ -828,7 +902,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 76,
@@ -839,7 +914,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 77,
@@ -850,7 +926,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 78,
@@ -861,7 +938,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 79,
@@ -872,7 +950,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 80,
@@ -883,7 +962,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 81,
@@ -894,7 +974,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 82,
@@ -905,7 +986,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 83,
@@ -916,7 +998,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 84,
@@ -927,7 +1010,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 85,
@@ -938,7 +1022,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 86,
@@ -949,7 +1034,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 87,
@@ -960,7 +1046,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 88,
@@ -971,7 +1058,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 89,
@@ -982,7 +1070,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 90,
@@ -993,7 +1082,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "EMS写BMS起停",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 91,
@@ -1004,7 +1094,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "EMS写BMS消音/复位",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 92,
@@ -1015,7 +1106,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "EMS写BMS急停",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 93,
@@ -1026,7 +1118,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 94,
@@ -1037,7 +1130,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 95,
@@ -1048,7 +1142,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 96,
@@ -1059,7 +1154,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 97,
@@ -1070,7 +1166,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 98,
@@ -1081,7 +1178,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 99,
@@ -1092,7 +1190,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 100,
@@ -1103,7 +1202,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "网侧AB线电压",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "V"
     },
     {
       "index": 101,
@@ -1114,7 +1214,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "网侧BC线电压",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "V"
     },
     {
       "index": 102,
@@ -1125,7 +1226,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "网侧CA线电压",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "V"
     },
     {
       "index": 103,
@@ -1136,7 +1238,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "逆变侧AB线电压",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "V"
     },
     {
       "index": 104,
@@ -1147,7 +1250,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "逆变侧BC线电压",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "V"
     },
     {
       "index": 105,
@@ -1158,7 +1262,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "逆变侧CA线电压",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "V"
     },
     {
       "index": 106,
@@ -1169,7 +1274,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "直流电压",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "V"
     },
     {
       "index": 107,
@@ -1180,7 +1286,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "直流电流",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "A"
     },
     {
       "index": 108,
@@ -1191,7 +1298,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "滤波电感A相电流",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "A"
     },
     {
       "index": 109,
@@ -1202,7 +1310,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "滤波电感B相电流",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "A"
     },
     {
       "index": 110,
@@ -1213,7 +1322,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "滤波电感C相电流",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "A"
     },
     {
       "index": 111,
@@ -1224,7 +1334,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "逆变A相电流",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "A"
     },
     {
       "index": 112,
@@ -1235,7 +1346,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "逆变B相电流",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "A"
     },
     {
       "index": 113,
@@ -1246,7 +1358,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "逆变C相电流",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "A"
     },
     {
       "index": 114,
@@ -1257,7 +1370,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "NPC上电容电压",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "V"
     },
     {
       "index": 115,
@@ -1268,7 +1382,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "NPC下电容电压",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "V"
     },
     {
       "index": 116,
@@ -1279,7 +1394,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "滤波电容A相电流",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "A"
     },
     {
       "index": 117,
@@ -1290,7 +1406,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "滤波电容B相电流",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "A"
     },
     {
       "index": 118,
@@ -1301,7 +1418,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "滤波电容C相电流",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "A"
     },
     {
       "index": 119,
@@ -1312,7 +1430,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "A相温度",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "℃"
     },
     {
       "index": 120,
@@ -1323,7 +1442,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "B相温度",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "℃"
     },
     {
       "index": 121,
@@ -1334,7 +1454,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "C相温度",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "℃"
     },
     {
       "index": 122,
@@ -1345,7 +1466,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "电池功率",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "kW"
     },
     {
       "index": 123,
@@ -1356,7 +1478,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "输出功率",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "kW"
     },
     {
       "index": 124,
@@ -1367,7 +1490,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "无功功率",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "kVar"
     },
     {
       "index": 125,
@@ -1378,7 +1502,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "输出功率因数",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "——"
     },
     {
       "index": 126,
@@ -1389,7 +1514,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "电网视在功率",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "kW"
     },
     {
       "index": 127,
@@ -1400,7 +1526,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "当前允许最大放电功率",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "kW"
     },
     {
       "index": 128,
@@ -1411,7 +1538,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "当前允许最大充电功率",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "kW"
     },
     {
       "index": 129,
@@ -1422,7 +1550,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "直流充电量",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "kWh"
     },
     {
       "index": 130,
@@ -1433,7 +1562,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "直流放电量",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "kWh"
     },
     {
       "index": 131,
@@ -1444,7 +1574,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "交流充电量",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "kWh"
     },
     {
       "index": 132,
@@ -1455,7 +1586,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "交流放电量",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "kWh"
     },
     {
       "index": 133,
@@ -1466,7 +1598,8 @@
       "dataType": "UINT16",
       "widthBits": 16,
       "name": "今日放电量(高16比特）",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "kWh"
     },
     {
       "index": 134,
@@ -1477,7 +1610,8 @@
       "dataType": "UINT16",
       "widthBits": 16,
       "name": "今日放电量(低16比特）",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "kWh"
     },
     {
       "index": 135,
@@ -1488,7 +1622,8 @@
       "dataType": "UINT16",
       "widthBits": 16,
       "name": "今日充电量(高16比特）",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "kWh"
     },
     {
       "index": 136,
@@ -1499,7 +1634,8 @@
       "dataType": "UINT16",
       "widthBits": 16,
       "name": "今日充电量(低16比特）",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "kWh"
     },
     {
       "index": 137,
@@ -1510,7 +1646,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "总充电量(高16比特）",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "kWh"
     },
     {
       "index": 138,
@@ -1521,7 +1658,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "总充电量(低16比特）",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "kWh"
     },
     {
       "index": 139,
@@ -1532,7 +1670,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "总放电量(高16比特）",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "kWh"
     },
     {
       "index": 140,
@@ -1543,7 +1682,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "总放电量(低16比特）",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "kWh"
     },
     {
       "index": 141,
@@ -1554,7 +1694,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "A 相NTC 温度（模块1）",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "℃"
     },
     {
       "index": 142,
@@ -1565,7 +1706,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "B 相NTC 温度（模块1）",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "℃"
     },
     {
       "index": 143,
@@ -1576,7 +1718,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "C 相NTC 温度（模块1）",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "℃"
     },
     {
       "index": 144,
@@ -1587,7 +1730,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "电抗器温度（模块1）",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "℃"
     },
     {
       "index": 145,
@@ -1598,7 +1742,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "A 相NTC 温度（模块2）",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "℃"
     },
     {
       "index": 146,
@@ -1609,7 +1754,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "B 相NTC 温度（模块2）",
-      "scale": 0.1
+      "scale": 0.1,
+      "unit": "℃"
     },
     {
       "index": 147,
@@ -1620,7 +1766,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "C 相NTC 温度（模块2）",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "℃"
     },
     {
       "index": 148,
@@ -1631,7 +1778,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "电抗器温度（模块 2）",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": "℃"
     },
     {
       "index": 149,
@@ -1642,7 +1790,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "环境温度",
-      "scale": 1
+      "scale": 1,
+      "unit": "℃"
     },
     {
       "index": 150,
@@ -1653,7 +1802,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "系统绝缘阻抗",
-      "scale": 1
+      "scale": 1,
+      "unit": "Ω"
     },
     {
       "index": 151,
@@ -1664,7 +1814,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "FPGA版本号",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 152,
@@ -1675,7 +1826,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "MCU版本号",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 153,
@@ -1686,7 +1838,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用5",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 154,
@@ -1697,7 +1850,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用6",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 155,
@@ -1708,7 +1862,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用7",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 156,
@@ -1719,7 +1874,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用8",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 157,
@@ -1730,7 +1886,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用9",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 158,
@@ -1741,7 +1898,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用10",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 159,
@@ -1752,7 +1910,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用11",
-      "scale": 1.0
+      "scale": 1.0,
+      "unit": ""
     },
     {
       "index": 160,
@@ -1763,7 +1922,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用12",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 161,
@@ -1774,7 +1934,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用13",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 162,
@@ -1785,7 +1946,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用14",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 163,
@@ -1796,7 +1958,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用15",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 164,
@@ -1807,7 +1970,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用16",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 165,
@@ -1818,7 +1982,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用17",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 166,
@@ -1829,7 +1994,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用18",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 167,
@@ -1840,7 +2006,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用19",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 168,
@@ -1851,7 +2018,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用20",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 169,
@@ -1862,7 +2030,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用21",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 170,
@@ -1873,7 +2042,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用22",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 171,
@@ -1884,7 +2054,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用23",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 172,
@@ -1895,7 +2066,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用24",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 173,
@@ -1906,7 +2078,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用25",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 174,
@@ -1917,7 +2090,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用26",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 175,
@@ -1928,7 +2102,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用27",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 176,
@@ -1939,7 +2114,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用28",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 177,
@@ -1950,7 +2126,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用29",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 178,
@@ -1961,7 +2138,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用30",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 179,
@@ -1972,7 +2150,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用31",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 180,
@@ -1983,7 +2162,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "PCS系统状态-位模式",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 181,
@@ -1994,7 +2174,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "单元igbt状态",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 182,
@@ -2005,7 +2186,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "PCS故障状态字1",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 183,
@@ -2016,7 +2198,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "PCS故障状态字2",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 184,
@@ -2027,7 +2210,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "PCS故障状态字3",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 185,
@@ -2038,7 +2222,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "PCS故障状态字4",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 186,
@@ -2049,7 +2234,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "状态告警",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 187,
@@ -2060,7 +2246,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "系统警告",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 188,
@@ -2071,7 +2258,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "开关反馈",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 189,
@@ -2082,7 +2270,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用32",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 190,
@@ -2093,7 +2282,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用33",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 191,
@@ -2104,7 +2294,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用34",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 192,
@@ -2115,7 +2306,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用35",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 193,
@@ -2126,7 +2318,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用36",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 194,
@@ -2137,7 +2330,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用37",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 195,
@@ -2148,7 +2342,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用38",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 196,
@@ -2159,7 +2354,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用39",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 197,
@@ -2170,7 +2366,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用40",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 198,
@@ -2181,7 +2378,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用41",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 199,
@@ -2192,7 +2390,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用42",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 200,
@@ -2203,7 +2402,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "故障复位",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 201,
@@ -2214,7 +2414,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "起动/停止",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 202,
@@ -2225,7 +2426,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用43",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 203,
@@ -2236,7 +2438,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用44",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 204,
@@ -2247,7 +2450,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "充放电控制模式",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 205,
@@ -2258,7 +2462,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "离网模式系统频率",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 206,
@@ -2269,7 +2474,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "恒压模式参考电压",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 207,
@@ -2280,7 +2486,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "恒流模式下参考电流",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 208,
@@ -2291,7 +2498,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "软起时间",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 209,
@@ -2302,7 +2510,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "软停时间",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 210,
@@ -2313,7 +2522,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "最大电流限值",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 211,
@@ -2324,7 +2534,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "有功功率参考值",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 212,
@@ -2335,7 +2546,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "感性无功参考值",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 213,
@@ -2346,7 +2558,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "容性无功参考值",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 214,
@@ -2357,7 +2570,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "恒压模式比例系数kp",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 215,
@@ -2368,7 +2582,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "恒压模式积分系数ki",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 216,
@@ -2379,7 +2594,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "恒压模式积分上限max",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 217,
@@ -2390,7 +2606,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "恒压模式积分下限min",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 218,
@@ -2401,7 +2618,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "恒流模式比例系数",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 219,
@@ -2412,7 +2630,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用45",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 220,
@@ -2423,7 +2642,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用46",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 221,
@@ -2434,7 +2654,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用47",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 222,
@@ -2445,7 +2666,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用48",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 223,
@@ -2456,7 +2678,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用49",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 224,
@@ -2467,7 +2690,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用50",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 225,
@@ -2478,7 +2702,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用51",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 226,
@@ -2489,7 +2714,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用52",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 227,
@@ -2500,7 +2726,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用53",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 228,
@@ -2511,7 +2738,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用54",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 229,
@@ -2522,7 +2750,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用55",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 230,
@@ -2533,7 +2762,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用56",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 231,
@@ -2544,7 +2774,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用57",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 232,
@@ -2555,7 +2786,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用58",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 233,
@@ -2566,7 +2798,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用59",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 234,
@@ -2577,7 +2810,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用60",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 235,
@@ -2588,7 +2822,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用61",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 236,
@@ -2599,7 +2834,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用62",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 237,
@@ -2610,7 +2846,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用63",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 238,
@@ -2621,7 +2858,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用64",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 239,
@@ -2632,7 +2870,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用65",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 240,
@@ -2643,7 +2882,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用66",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 241,
@@ -2654,7 +2894,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用67",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 242,
@@ -2665,7 +2906,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用68",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 243,
@@ -2676,7 +2918,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用69",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 244,
@@ -2687,7 +2930,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用70",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 245,
@@ -2698,7 +2942,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用71",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 246,
@@ -2709,7 +2954,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用72",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 247,
@@ -2720,7 +2966,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用73",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 248,
@@ -2731,7 +2978,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用74",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 249,
@@ -2742,7 +2990,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用75",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     },
     {
       "index": 250,
@@ -2753,7 +3002,8 @@
       "dataType": "INT16",
       "widthBits": 16,
       "name": "备用76",
-      "scale": 1
+      "scale": 1,
+      "unit": ""
     }
   ]
 }

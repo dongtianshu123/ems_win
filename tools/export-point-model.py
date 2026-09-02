@@ -33,6 +33,7 @@ def export_model(input_path, output_path):
                 "widthBits": int(str(row[5]).replace("位", "")),
                 "name": str(row[6] or "").strip(),
                 "scale": float(row[8]) if isinstance(row[8], (int, float)) and row[8] > 0 else 1,
+                "unit": str(row[9] or "").strip(),
             }
         )
 

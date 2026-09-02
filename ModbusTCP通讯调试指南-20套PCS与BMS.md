@@ -232,15 +232,15 @@ Set-Location 'D:\work\研发\ems'
 npm.cmd start
 ```
 
-保持窗口打开。正常时真实桥接逐行连接所有已启用设备，并在`ws://127.0.0.1:8082`发布数据。每行使用自己的IP、端口、Unit ID、超时和轮询周期。
+保持窗口打开。正常时真实桥接逐行连接所有已启用设备，并在`ws://127.0.0.1:8080`发布数据。每行使用自己的IP、端口、Unit ID、超时和轮询周期。
 
 注意：双击`EMS一键启动.exe`启动的是只读模拟数据，适用于界面演示，不是现场真实Modbus采集。真实调试必须启动`npm.cmd start`，并确保界面顶部显示“实时数据 · MODBUS TCP”，而不是“模拟数据 · READ ONLY”。
 
-若8082被占用：
+若8080被占用：
 
 ```powershell
-Get-NetTCPConnection -LocalPort 8082 -ErrorAction SilentlyContinue
-Get-Process -Id (Get-NetTCPConnection -LocalPort 8082).OwningProcess
+Get-NetTCPConnection -LocalPort 8080 -ErrorAction SilentlyContinue
+Get-Process -Id (Get-NetTCPConnection -LocalPort 8080).OwningProcess
 ```
 
 先确认占用进程是否为旧的EMS桥接。不要直接结束未知生产进程。
@@ -256,7 +256,7 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 8082).OwningProcess
 真实桥接运行后，打开已部署的`vrb_scada_premium.html`。若使用当前本机预览地址，可在网址中指定WebSocket：
 
 ```text
-http://127.0.0.1:8090/vrb_scada_premium.html?ws=ws://127.0.0.1:8082
+http://127.0.0.1:8090/vrb_scada_premium.html?ws=ws://127.0.0.1:8080
 ```
 
 界面操作：
@@ -272,11 +272,11 @@ http://127.0.0.1:8090/vrb_scada_premium.html?ws=ws://127.0.0.1:8082
 9. 切到“通信与点表”，核对数据质量、点表版本和只读状态。
 10. 切到“参数设置”，可重新读取、编辑、FC03测试、导入导出和保存设备参数；保存后重启真实通讯。
 11. 在“BMS 电池系统”页面右上角选择数据通道：
-    - “真实Modbus通道”连接`ws://127.0.0.1:8082`，显示现场采集数据；
+    - “真实Modbus通道”连接`ws://127.0.0.1:8080`，显示现场采集数据；
     - “模拟数据通道”连接`ws://127.0.0.1:8081`，只用于界面演示；
     - 顶部必须显示“实时数据 · MODBUS TCP”才能把BMS数值作为现场数据使用。
 
-通道切换只改变当前页面的数据来源，不会启动或停止采集进程。切换到真实通道前，应先启动真实Modbus通讯并确认8082正在监听。
+通道切换只改变当前页面的数据来源，不会启动或停止采集进程。切换到真实通道前，应先启动真实Modbus通讯并确认8080正在监听。
 
 ## 12. 使用第三方Modbus主站交叉验证
 
@@ -331,7 +331,7 @@ Modbus TCP没有串口CRC字段，不要把RTU的CRC问题套用到TCP报文。
 | 多台显示同一值 | Unit ID重复或网关忽略Unit ID | 逐台断开/改变状态核对 |
 | 页面显示`--` | 测点缺失、质量BAD_COMM或映射名称不匹配 | 查桥接日志、快照质量、点表模型 |
 | 页面显示模拟数据 | 启动了mock桥而非真实桥 | 停止mock，运行`npm.cmd start` |
-| WebSocket断开 | 8082端口冲突、桥接退出或URL错误 | 查进程、终端日志和页面ws参数 |
+| WebSocket断开 | 8080端口冲突、桥接退出或URL错误 | 查进程、终端日志和页面ws参数 |
 
 ## 15. 性能和轮询验收
 

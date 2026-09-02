@@ -6,6 +6,7 @@ const WebSocket = require("ws");
 const { AlarmEngine } = require("./src/alarm-engine");
 const { createReadBlocks, decodeBlock, deriveControlState, SerialTransport } = require("./src/bridge-core");
 const { CommandEngine } = require("./src/command-engine");
+const { buildConnectionStatuses } = require("./src/connection-status");
 const { loadConfig, validateConfig } = require("./src/config-manager");
 const { Historian } = require("./src/historian");
 const { loadPointModel, validatePointModel, getPointByAddress } = require("./src/point-model");
@@ -70,7 +71,13 @@ function broadcast(message) {
 
 function publish() {
   latestData = buildScadaData(snapshots, new Date().toISOString(), alarmEngine.listActive());
+  latestData.meta.connections = buildConnectionStatuses(endpoints.values());
   broadcast({ type: "scada_update", data: latestData });
+}
+
+function setEndpointState(endpoint, status, error = null) {
+  endpoint.status = status;
+  endpoint.lastError = error ? error.message : null;
 }
 
 function evaluateSnapshotAlarm(snapshot) {
@@ -150,6 +157,12 @@ async function runPollCycle(runtime) {
   if (result.skipped) return;
   const entry = result.results[0];
   snapshots[runtime.device.id] = entry.ok ? entry.value : badSnapshot(runtime.device, entry.error);
+  if (entry.ok) {
+    setEndpointState(runtime.endpoint, "CONNECTED");
+    runtime.endpoint.lastPollAt = snapshots[runtime.device.id].receivedAt;
+  } else {
+    setEndpointState(runtime.endpoint, "POLL_ERROR", entry.error);
+  }
   queueHistory(snapshots[runtime.device.id]);
   evaluateSnapshotAlarm(snapshots[runtime.device.id]);
   publish();
@@ -170,6 +183,8 @@ function stopEndpoint(endpoint) {
 function scheduleReconnect(endpoint) {
   if (endpoint.reconnectTimer) clearTimeout(endpoint.reconnectTimer);
   endpoint.reconnectTimer = setTimeout(() => connect(endpoint), endpoint.reconnectIntervalMs);
+  setEndpointState(endpoint, "RETRY_WAIT", endpoint.lastError ? new Error(endpoint.lastError) : null);
+  publish();
 }
 
 function markEndpointBad(endpoint, error) {
@@ -184,15 +199,22 @@ function markEndpointBad(endpoint, error) {
 async function connect(endpoint) {
   if (endpoint.connecting) return;
   endpoint.connecting = true;
+  endpoint.lastAttemptAt = new Date().toISOString();
+  setEndpointState(endpoint, "CONNECTING");
+  publish();
   if (endpoint.reconnectTimer) clearTimeout(endpoint.reconnectTimer);
   endpoint.reconnectTimer = null;
   const client = new ModbusRTU();
   endpoint.client = client;
   try {
     await client.connectTCP(endpoint.host, { port: endpoint.port });
+    endpoint.lastConnectedAt = new Date().toISOString();
+    setEndpointState(endpoint, "CONNECTED");
+    publish();
     console.log(`[bridge] endpoint ${endpoint.key} connected for ${endpoint.runtimes.length} device(s)`);
     client.on("close", () => {
       stopEndpoint(endpoint);
+      setEndpointState(endpoint, "DISCONNECTED", new Error("connection_closed"));
       markEndpointBad(endpoint, new Error("connection_closed"));
       scheduleReconnect(endpoint);
     });
@@ -206,6 +228,7 @@ async function connect(endpoint) {
   } catch (error) {
     console.error(`[bridge] endpoint ${endpoint.key} connection failed:`, error.message);
     markEndpointBad(endpoint, error);
+    setEndpointState(endpoint, "RETRY_WAIT", error);
     stopEndpoint(endpoint);
     scheduleReconnect(endpoint);
   } finally {
@@ -261,6 +284,11 @@ for (const group of groupDevicesByEndpoint(enabledDevices)) {
     reconnectIntervalMs: Math.min(...group.devices.map((device) => device.reconnectIntervalMs)),
     runtimes: [],
     transport: new SerialTransport(),
+    status: "WAITING",
+    lastAttemptAt: null,
+    lastConnectedAt: null,
+    lastPollAt: null,
+    lastError: null,
   };
   endpoints.set(endpoint.key, endpoint);
   for (const device of group.devices) {

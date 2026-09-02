@@ -49,6 +49,7 @@ button{font:inherit}.command-center{min-height:100vh;padding:18px;display:flex;f
 @media(max-width:1500px){.device-fields{grid-template-columns:repeat(5,1fr)}.settings-summary{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:900px){.device-fields,.gateway-fields,.settings-summary{grid-template-columns:repeat(2,1fr)}.engineering-head{flex-direction:column}.settings-toolbar{justify-content:flex-start}}
 @media(max-width:680px){.command-center{padding:8px}.status-ribbon{grid-template-columns:repeat(2,1fr)}.side,.right-stack{grid-template-columns:1fr}.brand h1{font-size:15px}.weather{display:none}.fleet-grid{grid-template-columns:repeat(4,1fr)}.main-stage{grid-template-rows:330px auto}.topbar{flex-direction:column}.top-meta{width:100%;justify-content:space-between}}
+.connection-card{grid-column:1/-1}.connection-row{display:grid;grid-template-columns:1.15fr .7fr .9fr 1fr 1.5fr;gap:10px;align-items:center;padding:9px 0;border-top:1px solid rgba(100,145,183,.12);font:9px Consolas}.connection-row:first-child{border-top:0}.connection-state{color:var(--amber)}.connection-state.good{color:var(--green)}.connection-error{color:var(--red);word-break:break-all}.connection-empty{color:var(--muted);font-size:9px}
 </style>
 </head>
 <body>
@@ -200,6 +201,7 @@ button{font:inherit}.command-center{min-height:100vh;padding:18px;display:flex;f
         <div class="protocol-grid">
           <div class="protocol-card"><h3>Modbus TCP</h3><dl><dt>设备端点</dt><dd>按设备独立配置</dd><dt>配置入口</dt><dd>参数设置</dd><dt>设备类型</dt><dd>PCS / BMS / 共用</dd><dt>读取功能码</dt><dd>FC03</dd><dt>写入功能码</dt><dd>FC06（当前禁用）</dd></dl></div>
           <div class="protocol-card"><h3>点表绑定</h3><dl><dt>版本</dt><dd>EMS通信点表V1.2</dd><dt>地址约定</dt><dd>表内1基 / 协议0基</dd><dt>A区电压</dt><dd>DATA233～DATA247</dd><dt>B区电压</dt><dd>DATA249～DATA263</dd><dt>通信状态</dt><dd id="protocolQuality">--</dd></dl></div>
+          <div class="protocol-card connection-card"><h3>真实 Modbus TCP 端点运行状态</h3><div id="connectionStatusPanel" class="connection-empty">等待真实通讯服务上报端点状态…</div></div>
         </div>
       </section>
 
@@ -357,6 +359,15 @@ function renderEngineeringViews(data){
   const hydraulic=hydraulicMarkup(bms);el('hydraulicPanel').innerHTML=hydraulic;el('electrolytePanel').innerHTML=hydraulic;
   el('bmsPointPanel').innerHTML=[metric('SOC',bms.soc,'%'),metric('电堆直流电压',bms.dc?.voltage,'V'),metric('充放电直流电流',bms.dc?.current,'A'),metric('最高单体电压',bms.cellVoltage?.max,'V'),metric('最低单体电压',bms.cellVoltage?.min,'V'),metric('泵阀状态字',bms.pumpValveStatusWord)].join('');
   text('protocolQuality',`${data.meta?.quality||'BAD_COMM'} · ${data.meta?.source==='live'?'实时':'模拟/离线'}`);
+  renderConnectionStatuses(data.meta?.connections||[]);
+}
+
+function renderConnectionStatuses(connections){
+  const panel=el('connectionStatusPanel');
+  if(!connections.length){panel.className='connection-empty';panel.textContent='当前数据源未上报真实端点；请使用“启动真实Modbus通讯.cmd”。';return}
+  const labels={WAITING:'等待启动',CONNECTING:'连接中',CONNECTED:'已连接并轮询',POLL_ERROR:'轮询错误',DISCONNECTED:'连接断开',RETRY_WAIT:'重连等待'};
+  panel.className='';
+  panel.innerHTML=connections.map(item=>`<div class="connection-row"><b>${escapeHtml(item.host)}:${escapeHtml(item.port)}</b><span class="connection-state ${item.status==='CONNECTED'?'good':''}">${escapeHtml(labels[item.status]||item.status)}</span><span>${escapeHtml((item.devices||[]).map(device=>`${device.id}/U${device.unitId}`).join(', '))}</span><span>最近轮询 ${escapeHtml(item.lastPollAt?new Date(item.lastPollAt).toLocaleTimeString():'--')}</span><span class="connection-error">${escapeHtml(item.lastError||'无错误')}</span></div>`).join('');
 }
 
 function renderFleet(data){
