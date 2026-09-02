@@ -1,5 +1,34 @@
 const PCS_IDS = Array.from({ length: 20 }, (_, index) => `PCS${String(index + 1).padStart(2, "0")}`);
 const { mapBmsTelemetry, mapPcsTelemetry } = require("./scada-point-map");
+const { buildDailyReport } = require("./report-service");
+
+function createMockReport(timestamp) {
+  const date = timestamp.slice(0, 10);
+  const at = (hour) => `${date}T${String(hour).padStart(2, "0")}:00:00.000Z`;
+  const report = buildDailyReport({
+    date,
+    expectedPccSamples: 3,
+    expectedPcsIntervals: 4,
+    pccReadings: [
+      { at: at(0), importKWh: 100, exportKWh: 50, quality: "GOOD" },
+      { at: at(1), importKWh: 110, exportKWh: 50, quality: "GOOD" },
+      { at: at(2), importKWh: 110, exportKWh: 58, quality: "GOOD" },
+    ],
+    pcsIntervals: [
+      { deviceId: "PCS01", chargeKWh: 6, dischargeKWh: 0, quality: "GOOD" },
+      { deviceId: "PCS02", chargeKWh: 4, dischargeKWh: 0, quality: "GOOD" },
+      { deviceId: "PCS01", chargeKWh: 0, dischargeKWh: 4.5, quality: "GOOD" },
+      { deviceId: "PCS02", chargeKWh: 0, dischargeKWh: 3.5, quality: "GOOD" },
+    ],
+    tariffs: [
+      { name: "谷", from: at(0), to: at(1), buyPrice: 0.3, sellPrice: 0.2 },
+      { name: "峰", from: at(1), to: at(2), buyPrice: 0.8, sellPrice: 1.0 },
+    ],
+  });
+  report.simulated = true;
+  report.settlement.note = "模拟PCC表计与模拟电价的可复算样例，不可用于财务结算";
+  return report;
+}
 
 function createMockData(tick = 0, timestamp = new Date().toISOString()) {
   const charging = Math.floor(tick / 20) % 2 === 0;
@@ -81,6 +110,7 @@ function createMockData(tick = 0, timestamp = new Date().toISOString()) {
     };
   });
   const totalPower = pcsUnits.reduce((sum, pcs) => sum + pcs.P, 0);
+  const report = createMockReport(timestamp);
 
   return {
     meta: {
@@ -94,8 +124,8 @@ function createMockData(tick = 0, timestamp = new Date().toISOString()) {
       totalPower,
       avgSoc: 60,
       avgSoh: 95,
-      dailyEnergy: 20,
-      efficiency: 76,
+      dailyEnergy: report.settlement.chargeKWh,
+      efficiency: report.settlement.roundTripEfficiencyPct,
       chargeMode: charging ? "充电模式" : "放电模式",
       chargeModeIcon: charging ? "↓" : "↑",
     },
@@ -129,6 +159,7 @@ function createMockData(tick = 0, timestamp = new Date().toISOString()) {
     gridMeters: [],
     sensor: {},
     alarms: [],
+    report,
   };
 }
 

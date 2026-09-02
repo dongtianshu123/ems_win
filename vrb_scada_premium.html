@@ -399,8 +399,8 @@ function renderTrend(data){
 }
 
 function renderReport(report){
-  state.report=report||null;const settlement=report?.settlement||{},operational=report?.operational||{};const settleable=settlement.status==='SETTLEABLE';
-  text('settlementStatus',settleable?'可结算':'不可结算');el('settlementStatus').classList.toggle('valid',settleable);
+  state.report=report||null;const settlement=report?.settlement||{},operational=report?.operational||{};const settleable=settlement.status==='SETTLEABLE';const simulated=report?.simulated===true;
+  text('settlementStatus',simulated?'模拟可复算':settleable?'可结算':'不可结算');el('settlementStatus').classList.toggle('valid',settleable);
   text('settlementCharge',`${fmt(settlement.chargeKWh,2)} kWh`);text('settlementDischarge',`${fmt(settlement.dischargeKWh,2)} kWh`);text('settlementEfficiency',`${fmt(settlement.roundTripEfficiencyPct,2)} %`);text('settlementRevenue',`${fmt(settlement.netRevenue,2)} 元`);
   text('operationalStatus','仅供分析');text('operationalCharge',`${fmt(operational.chargeKWh,2)} kWh`);text('operationalDischarge',`${fmt(operational.dischargeKWh,2)} kWh`);text('operationalEfficiency',`${fmt(operational.roundTripEfficiencyPct,2)} %`);text('operationalMissing',`${fmt(operational.missingRatePct,2)} %`);
   text('reportCaveat',settlement.note||'当前工程尚未配置PCC结算表计，因此财务结果明确标记为“不可结算”；PCS合计不得作为收益结算依据。');el('reportCsvExport').disabled=!report;
