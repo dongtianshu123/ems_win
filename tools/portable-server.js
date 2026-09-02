@@ -6,6 +6,7 @@ const { Historian } = require("../src/historian");
 const { createReportApi } = require("../src/report-api");
 const { buildHistoricalDailyReport } = require("../src/report-history");
 const { createSettingsApi } = require("../src/settings-api");
+const { createDispatchApi } = require("../src/dispatch-api");
 
 const root = path.join(__dirname, "..");
 const httpPort = Number(process.env.EMS_HTTP_PORT || 8090);
@@ -19,6 +20,9 @@ const contentTypes = {
 const settingsApi = createSettingsApi({
   configPath: path.join(root, "vrfb_modbus_config.json"),
   ModbusClient: ModbusRTU,
+});
+const dispatchApi = createDispatchApi({
+  configPath: path.join(root, "config", "dispatch-config.json"),
 });
 const historian = new Historian(process.env.EMS_HISTORY_DB || path.join(root, "data", "ems-history.sqlite"));
 const reportApi = createReportApi({
@@ -40,6 +44,7 @@ function resolveRequestPath(requestUrl) {
 
 const server = http.createServer(async (request, response) => {
   if (await reportApi(request, response)) return;
+  if (await dispatchApi(request, response)) return;
   if (await settingsApi(request, response)) return;
   const filePath = resolveRequestPath(request.url);
   if (!filePath) {
