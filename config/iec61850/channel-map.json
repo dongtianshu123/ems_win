@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "enabled": false,
+  "commissioningStatus": "MISSING_VENDOR_SCL",
+  "coordinator": { "enabled": false, "owner": "UNCONFIGURED" },
+  "missingMaterials": [
+    "ICD/IID",
+    "GOOSE发布订阅清单",
+    "MMS点表",
+    "VLAN/双网冗余/对时方案",
+    "一次调频/AGC/AVC验收指标"
+  ],
+  "sclFiles": [],
+  "channels": []
+}

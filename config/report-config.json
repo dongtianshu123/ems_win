@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "enabled": false,
+  "utcOffsetMinutes": 480,
+  "pcc": {
+    "deviceId": "",
+    "importPoint": "",
+    "exportPoint": "",
+    "counter": { "dailyReset": false, "rolloverMax": null, "maxDelta": null }
+  },
+  "pcs": [],
+  "tariffs": [],
+  "expectedPccSamples": null,
+  "expectedPcsIntervals": null,
+  "schedule": { "enabled": false, "hour": 0, "minute": 10 },
+  "note": "待现场PCC及PCS累计电量点表、电价和计数器规则确认后启用；禁止虚构地址。"
+}

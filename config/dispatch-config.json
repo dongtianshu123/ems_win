@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "mode": "SHADOW",
+  "masterEnabled": false,
+  "fieldWriteEnabled": false,
+  "scenario": "NORMAL",
+  "elapsedSeconds": 1,
+  "strategies": {
+    "SAFETY": { "enabled": false, "targetPowerKw": 0 },
+    "DISPATCH_COMMITMENT": { "enabled": false, "targetPowerKw": 3000 },
+    "DEMAND_LIMIT": { "enabled": false, "targetPowerKw": 2000 },
+    "ARBITRAGE": { "enabled": false, "targetPowerKw": -1500 },
+    "SOC_MAINTENANCE": { "enabled": false, "targetPowerKw": -500 }
+  }
+}
