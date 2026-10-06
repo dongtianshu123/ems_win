@@ -1,0 +1,6 @@
+2026-10-06T06:17:27.322Z EMS启动成功 mode=mock page=8090 data=mock:8081
+2026-10-06T06:17:27.323Z 浏览器完整地址：http://127.0.0.1:8090/vrb_scada_premium.html?ws=ws%3A%2F%2F127.0.0.1%3A8081&source=mock&liveWs=ws%3A%2F%2F127.0.0.1%3A8082&mockWs=ws%3A%2F%2F127.0.0.1%3A8081
+2026-10-06T06:28:07.360Z 数据端口8081已被占用，使用独立端口8083
+2026-10-06T06:28:07.382Z 页面端口8090已占用，尝试8091
+2026-10-06T06:28:07.383Z EMS启动成功 mode=mock page=8091 data=mock:8083
+2026-10-06T06:28:07.383Z 浏览器完整地址：http://127.0.0.1:8091/vrb_scada_premium.html?ws=ws%3A%2F%2F127.0.0.1%3A8083&source=mock&liveWs=ws%3A%2F%2F127.0.0.1%3A8082&mockWs=ws%3A%2F%2F127.0.0.1%3A8083
